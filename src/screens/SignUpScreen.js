@@ -6,16 +6,18 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
-  Dimensions,
+  Platform,
   Alert,
+  Modal,
+  Pressable,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useFonts } from "expo-font";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-//import DateTimePicker from "@react-native-community/datetimepicker";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { RED_COLOR } from "../constants/color";
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 const SignUpScreen = ({ navigation }) => {
   //text input states
   const [firstName, setFirstName] = useState("");
@@ -27,7 +29,10 @@ const SignUpScreen = ({ navigation }) => {
   const [checkEmptyGmail, setCheckEmptyGmail] = useState(false);
   const [checkEmptyPassword, setCheckEmptyPassword] = useState(false);
   const [checkSamePassword, setCheckSamePassword] = useState(true);
-  const [open, setOpen] = useState(false); //open, close date picker
+  const [dateOfBirth, setDateOfBirth] = useState("");
+
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
 
   const handleSignUp = () => {
     if (gmail === "") {
@@ -59,7 +64,29 @@ const SignUpScreen = ({ navigation }) => {
     navigation.navigate("LoginScreen");
   };
 
-  const handleShowDatePicker = () => {};
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker);
+  };
+
+  const onChange = ({ type }, selectedDate) => {
+    if (type === "set") {
+      const currentDate = selectedDate;
+      setDate(currentDate);
+      console.log(currentDate.toString());
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+        setDateOfBirth(
+          currentDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        );
+      }
+    } else {
+      toggleDatePicker();
+    }
+  };
 
   const handleValidatePassword = (text) => {
     if (text !== password) {
@@ -148,7 +175,7 @@ const SignUpScreen = ({ navigation }) => {
           {/* end TextInput username */}
 
           {/* Button set date time */}
-          <View>
+          {/* <View>
             <TouchableOpacity
               style={{
                 height: 40,
@@ -160,7 +187,7 @@ const SignUpScreen = ({ navigation }) => {
                 flexDirection: "row",
                 alignItems: "center",
               }}
-              onPress={handleShowDatePicker}
+              onPress={showDatePicker}
             >
               <FontAwesome5
                 style={styles.inputIcon}
@@ -179,6 +206,60 @@ const SignUpScreen = ({ navigation }) => {
               >
                 Choose birthday date
               </Text>
+            </TouchableOpacity>
+
+            <DateTimePickerModal
+              isVisible={isDatePickerVisible}
+              mode="date"
+              onConfirm={handleConfirm}
+              onCancel={hideDatePicker}
+            />
+          </View> */}
+
+          <View>
+            <TouchableOpacity
+              style={{
+                height: 40,
+                borderRadius: 10,
+                backgroundColor: "#FFB7B7",
+                width: "100%",
+                marginTop: 10,
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <FontAwesome5
+                style={styles.inputIcon}
+                name="calendar-alt"
+                type="ionicons"
+                color="#E94057"
+              />
+              {showPicker && (
+                <DateTimePicker
+                  mode="date"
+                  display="spinner"
+                  value={date}
+                  onChange={onChange}
+                />
+              )}
+              {!showPicker && (
+                <Pressable style={{ width: "100%" }} onPress={toggleDatePicker}>
+                  <TextInput
+                    style={{
+                      flex: 1,
+                      fontFamily: "SourceSansProRegular",
+                      fontSize: 16,
+                      color: RED_COLOR,
+                      fontWeight: "bold",
+                    }}
+                    value={dateOfBirth}
+                    onChangeText={setDateOfBirth}
+                    placeholder="Choose Birthday Date"
+                    editable={false}
+                  />
+                </Pressable>
+              )}
             </TouchableOpacity>
           </View>
 
@@ -341,6 +422,30 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    width: "80%",
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+
   inputIcon: {
     paddingHorizontal: 8,
   },
