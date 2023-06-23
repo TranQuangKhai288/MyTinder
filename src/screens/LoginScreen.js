@@ -61,12 +61,6 @@ const LoginScreen = ({ navigation }) => {
     navigation.navigate("ForgotPassScreen");
   };
 
-  const [fontsLoaded] = useFonts({
-    SourceSansProBold: require("../assets/fonts/SourceSansPro-Bold.ttf"),
-    SourceSansProRegular: require("../assets/fonts/SourceSansPro-Regular.ttf"),
-  });
-  if (!fontsLoaded) return undefined;
-
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
