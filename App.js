@@ -25,10 +25,10 @@ export default function App() {
         {/* <View style={styles.container}>
         
       </View> */}
-        {/* <NavigationContainer>
+        <NavigationContainer>
           <Stack />
-        </NavigationContainer> */}
-        <OtherProfileScreen />
+        </NavigationContainer>
+        {/* <OtherProfileScreen /> */}
       </Provider>
     </SafeAreaProvider>
   );
