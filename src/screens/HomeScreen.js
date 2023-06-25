@@ -360,10 +360,10 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     marginBottom: 24,
   },
+  text_infor_wrapper: { flexDirection: "row", alignItems: "flex-end" },
   text: { color: "#fff", fontSize: 16 },
   textName: { color: "#fff", fontSize: 28 },
   textAge: { color: "#fff", fontSize: 24, marginLeft: 8 },
-  text_infor_wrapper: { flexDirection: "row", alignItems: "flex-end" },
 });
 
 export default HomeScreen;
