@@ -12,6 +12,7 @@ import TestScreen from "./src/screens/TestScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "./src/screens/SplashScreen";
 import OtherProfileScreen from "./src/screens/OtherProfileScreen";
+import SetUpProfile1 from "./src/screens/SetUpProfile1";
 
 export default function App() {
   const [fonsLoaded] = useFonts(SOURCE_SANS_PRO);
@@ -25,10 +26,10 @@ export default function App() {
         {/* <View style={styles.container}>
         
       </View> */}
-        <NavigationContainer>
+        {/* <NavigationContainer>
           <Stack />
-        </NavigationContainer>
-        {/* <OtherProfileScreen /> */}
+        </NavigationContainer> */}
+        <SetUpProfile1 />
       </Provider>
     </SafeAreaProvider>
   );

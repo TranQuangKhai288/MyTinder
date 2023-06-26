@@ -80,6 +80,8 @@ const styles = StyleSheet.create({
     paddingLeft: 96,
     paddingRight: 96,
     borderRadius: 16,
+    justifyContent: "center",
+    alignItems: "center",
   },
   button_text: {
     fontSize: 18,

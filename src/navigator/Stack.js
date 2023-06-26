@@ -15,7 +15,7 @@ const Stack = () => {
           null;
         },
       })}
-      initialRouteName="BottomTab"
+      initialRouteName="WelcomeScreen"
     >
       <stack.Screen name="BottomTab" component={BottomTab} />
       <stack.Screen name="LoginScreen" component={LoginScreen} />
