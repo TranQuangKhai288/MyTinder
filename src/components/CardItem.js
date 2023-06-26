@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { BlurView } from "expo-blur";
 
-import Icon from "./Icon";
+import { Entypo } from "@expo/vector-icons";
 
 const CardItem = ({
   actions,
@@ -45,7 +45,41 @@ const CardItem = ({
               </View>
             </View>
 
-            <BlurView style={styles.blur}></BlurView>
+            <BlurView style={styles.blur}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-around",
+                }}
+              >
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Entypo name="cross" size={30} color={"#ffffff"} />
+                </TouchableOpacity>
+                <View
+                  style={{
+                    borderWidth: 1,
+                    height: Dimensions.get("window").height / 18,
+                    borderColor: "#ffffff",
+                  }}
+                />
+                <TouchableOpacity
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Entypo name="heart" size={30} color={"#ffffff"} />
+                </TouchableOpacity>
+              </View>
+            </BlurView>
           </View>
         </ImageBackground>
       </View>
@@ -55,7 +89,8 @@ const CardItem = ({
 
 const styles = StyleSheet.create({
   containerCardItem: {
-    margin: 32,
+    marginLeft: 28,
+    marginTop: 32,
     borderRadius: 16,
     overflow: "hidden",
     width: Dimensions.get("window").width / 2.5,
@@ -77,15 +112,12 @@ const styles = StyleSheet.create({
   blur: {
     width: Dimensions.get("window").width / 2.5,
     height: Dimensions.get("window").height / 18,
-    position: "absolute",
-    bottom: 0,
+    blurType: "xlight",
   },
   text_wrapper: {
     alignItems: "flex-start",
     padding: 2,
-    marginLeft: 10,
-    marginBottom: 24,
-    bottom: 0,
+    marginLeft: 4,
   },
 
   text_infor_wrapper: {

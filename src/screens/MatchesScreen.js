@@ -14,9 +14,7 @@ import Icon from "../components/Icon";
 const DATA = [
   {
     id: 1,
-    name: "Trần Khải",
-    isOnline: true,
-    image: require("../assets/images/backgr.jpg"),
+    //image: require("../assets/images/backgr.jpg"),
   },
 ];
 
@@ -57,7 +55,10 @@ const MatchesScreen = ({ navigation }) => {
 
       <View style={{ paddingBottom: 120 }}>
         <FlatList
-          style={{ marginBottom: 20, backgroundColor: "transparent" }}
+          style={{
+            marginBottom: 20,
+            backgroundColor: "transparent",
+          }}
           numColumns={2}
           data={DATA}
           keyExtractor={(item, index) => index.toString()}
@@ -67,7 +68,6 @@ const MatchesScreen = ({ navigation }) => {
                 image={item.image}
                 name={item.name}
                 status={item.status}
-                variant
               />
             </TouchableOpacity>
           )}
