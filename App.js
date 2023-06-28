@@ -26,10 +26,9 @@ export default function App() {
         {/* <View style={styles.container}>
         
       </View> */}
-        {/* <NavigationContainer>
+        <NavigationContainer>
           <Stack />
-        </NavigationContainer> */}
-        <SetUpProfile1 />
+        </NavigationContainer>
       </Provider>
     </SafeAreaProvider>
   );

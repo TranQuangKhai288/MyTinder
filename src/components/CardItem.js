@@ -13,24 +13,16 @@ import { BlurView } from "expo-blur";
 
 import { Entypo } from "@expo/vector-icons";
 
-const CardItem = ({
-  actions,
-  description,
-  image,
-  matches,
-  name,
-  onPressLeft,
-  onPressRight,
-  status,
-  variant,
-}) => {
+const CardItem = (props) => {
+  console.log(props);
+
   return (
     <View style={styles.containerCardItem}>
       {/* IMAGE */}
       <View style={styles.card}>
         <ImageBackground
           source={{
-            uri: "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+            uri: props.info.image,
           }}
           style={{
             width: Dimensions.get("window").width / 2.5,
@@ -40,8 +32,8 @@ const CardItem = ({
           <View style={styles.content}>
             <View style={styles.text_wrapper}>
               <View style={styles.text_infor_wrapper}>
-                <Text style={styles.textName}>Khai Tran</Text>
-                <Text style={styles.textAge}>20</Text>
+                <Text style={styles.textName}>{props.info.lastname},</Text>
+                <Text style={styles.textAge}>{props.info.age}</Text>
               </View>
             </View>
 
@@ -62,6 +54,7 @@ const CardItem = ({
                 >
                   <Entypo name="cross" size={30} color={"#ffffff"} />
                 </TouchableOpacity>
+
                 <View
                   style={{
                     borderWidth: 1,
@@ -117,15 +110,24 @@ const styles = StyleSheet.create({
   text_wrapper: {
     alignItems: "flex-start",
     padding: 2,
-    marginLeft: 4,
+    marginLeft: 8,
   },
 
   text_infor_wrapper: {
     flexDirection: "row",
     alignItems: "flex-end",
   },
-  textName: { color: "#fff", fontSize: 28 },
-  textAge: { color: "#fff", fontSize: 24, marginLeft: 8 },
+  textName: {
+    color: "#fff",
+    fontSize: 24,
+    fontFamily: "SourceSansProRegular",
+  },
+  textAge: {
+    color: "#fff",
+    fontSize: 23,
+    marginLeft: 8,
+    fontFamily: "SourceSansProRegular",
+  },
 });
 
 export default CardItem;

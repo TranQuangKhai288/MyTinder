@@ -1,31 +1,147 @@
 import React from "react";
 import {
-  ScrollView,
   View,
   Text,
   TouchableOpacity,
-  StatusBar,
   FlatList,
   StyleSheet,
+  Dimensions,
 } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 import CardItem from "../components/CardItem";
-import Icon from "../components/Icon";
+import { ScrollView } from "react-native-virtualized-view";
 
 const DATA = [
   {
     id: 1,
-    //image: require("../assets/images/backgr.jpg"),
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Khai",
+    age: 20,
+    status: "online",
+  },
+  {
+    id: 2,
+    image:
+      "https://i.pinimg.com/736x/0b/22/97/0b2297a3c2d1006d93592c295cd4791b.jpg",
+    firstname: "Tran Quang",
+    lastname: "Ku",
+    age: 19,
+    status: "online",
+  },
+  {
+    id: 3,
+    image:
+      "https://t3.ftcdn.net/jpg/05/38/28/52/360_F_538285203_UJl9HNQ3oD3JfqCO8uvPxVTp4s0wtp2i.jpg",
+    firstname: "Tran Quang",
+    lastname: "Tam",
+    age: 15,
+    status: "online",
+  },
+  {
+    id: 4,
+    image:
+      "https://e0.pxfuel.com/wallpapers/331/165/desktop-wallpaper-cat-by-majist-72-now-browse-millions-of-popular-cats-an-cute-animals-cute-little-animals-cute-animal-drawings-cute-cartoon-kitten.jpg",
+    firstname: "Tran Quang",
+    lastname: "Vu",
+    age: 20,
+    status: "online",
+  },
+
+  {
+    id: 5,
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Aloo",
+    age: 20,
+    status: "online",
+  },
+  {
+    id: 6,
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Khai",
+    age: 25,
+    status: "online",
+  },
+  {
+    id: 7,
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Khai",
+    age: 25,
+    status: "online",
+  },
+  {
+    id: 8,
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Khai",
+    age: 25,
+    status: "online",
+  },
+  {
+    id: 9,
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Khai",
+    age: 25,
+    status: "online",
+  },
+  {
+    id: 10,
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Khai",
+    age: 25,
+    status: "online",
+  },
+  {
+    id: 11,
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Khai",
+    age: 25,
+    status: "online",
+  },
+  {
+    id: 12,
+    image:
+      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+    firstname: "Tran Quang",
+    lastname: "Khai",
+    age: 25,
+    status: "online",
   },
 ];
 
 const MatchesScreen = ({ navigation }) => {
-  const handleMatches = () => {
+  const insets = useSafeAreaInsets();
+  const handleMatchesinfo = () => {
     // Perform login logic here
-    navigation.navigate("InfomationScreen");
+    navigation.navigate("OtherProfileScreen");
   };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        {
+          paddingTop: insets.top - 30,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        },
+        styles.container,
+      ]}
+    >
       {/* header */}
       <View
         style={{
@@ -39,7 +155,6 @@ const MatchesScreen = ({ navigation }) => {
           justifyContent: "space-between",
         }}
       >
-        <StatusBar style="light" />
         <TouchableOpacity
           style={{ justifyContent: "flex-start", marginLeft: 24 }}
         >
@@ -53,28 +168,27 @@ const MatchesScreen = ({ navigation }) => {
       {/* end of header */}
       {/* list  */}
 
-      <View style={{ paddingBottom: 120 }}>
-        <FlatList
-          style={{
-            marginBottom: 20,
-            backgroundColor: "transparent",
-          }}
-          numColumns={2}
-          data={DATA}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity onPress={handleMatches}>
-              <CardItem
-                image={item.image}
-                name={item.name}
-                status={item.status}
-              />
-            </TouchableOpacity>
-          )}
-        />
-      </View>
+      <ScrollView style={{ marginBottom: 70 }}>
+        <View style={{ paddingBottom: 36 }}>
+          <FlatList
+            style={{
+              backgroundColor: "transparent",
+            }}
+            numColumns={2}
+            data={DATA}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={handleMatchesinfo}>
+                <CardItem info={item} />
+              </TouchableOpacity>
+            )}
+          />
+        </View>
+      </ScrollView>
 
       {/* end of list */}
+
+      <StatusBar style="dark" />
     </View>
   );
 };
