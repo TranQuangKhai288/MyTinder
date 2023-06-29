@@ -5,6 +5,8 @@ import BottomTab from "./BottomTab";
 import LoginScreen from "../screens/LoginScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
+import OtherProfileScreen from "../screens/OtherProfileScreen";
+import SignUpScreenByPhoneNumber from "../screens/SignUpScreenByPhoneNumber";
 
 const stack = createStackNavigator();
 const Stack = () => {
@@ -21,6 +23,12 @@ const Stack = () => {
       <stack.Screen name="LoginScreen" component={LoginScreen} />
       <stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
       <stack.Screen name="SignUpScreen" component={SignUpScreen} />
+      <stack.Screen
+        name="SignUpScreenByPhoneNumber"
+        component={SignUpScreenByPhoneNumber}
+      />
+
+      <stack.Screen name="OtherProfileScreen" component={OtherProfileScreen} />
     </stack.Navigator>
   );
 };

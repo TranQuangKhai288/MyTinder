@@ -15,7 +15,7 @@ import { SvgXml } from "react-native-svg";
 import { CloseIcon, HeartIcon, RightArrowIcon } from "../constants/icons";
 import { RED_COLOR } from "../constants/color";
 
-const OtherProfileScreen = () => {
+const OtherProfileScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const interests = ["Travel", "Music", "Sport", "Reading", "Cooking"];
   const gallery = [
@@ -27,6 +27,10 @@ const OtherProfileScreen = () => {
     require("../assets/images/test-gallery6.jpg"),
     require("../assets/images/test-gallery7.jpg"),
   ];
+
+  const handleMatches = () => {
+    navigation.goBack();
+  };
 
   return (
     <View
@@ -51,7 +55,10 @@ const OtherProfileScreen = () => {
             style={styles.avatar}
           />
         </View>
-        <TouchableOpacity style={styles.close_button_wrapper}>
+        <TouchableOpacity
+          style={styles.close_button_wrapper}
+          onPress={handleMatches}
+        >
           <SvgXml xml={RightArrowIcon} height={24} width={24} />
         </TouchableOpacity>
         <View style={styles.content_wrapper}>

@@ -20,15 +20,19 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 const SignUpScreen = ({ navigation }) => {
   //text input states
-  const [gmail, setGmail] = useState("");
+  const [phoneNumBer, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
-  const [checkEmptyGmail, setCheckEmptyGmail] = useState(false);
+  const [checkEmptyPhoneNumber, setCheckEmptyPhoneNumber] = useState(false);
   const [checkEmptyPassword, setCheckEmptyPassword] = useState(false);
   const [checkSamePassword, setCheckSamePassword] = useState(true);
+  const [dateOfBirth, setDateOfBirth] = useState("");
+
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
 
   const handleSignUp = () => {
-    if (gmail === "") {
-      setCheckEmptyGmail(true);
+    if (phoneNumBer === "") {
+      setCheckEmptyPhoneNumber(true);
     }
     if (password === "") {
       setCheckEmptyPassword(true);
@@ -36,7 +40,7 @@ const SignUpScreen = ({ navigation }) => {
     if (checkSamePassword === false) {
       Alert.alert("Password is not the same");
     } else {
-      createUserWithEmailAndPassword(FIREBASE_AUTH, gmail, password)
+      createUserWithEmailAndPassword(FIREBASE_AUTH, phoneNumBer, password)
         .then((userCredential) => {
           console.log("User created!");
         })
@@ -50,8 +54,28 @@ const SignUpScreen = ({ navigation }) => {
     navigation.navigate("LoginScreen");
   };
 
-  const handleSignUpByPhoneNumber = () => {
-    navigation.navigate("SignUpScreenByPhoneNumber");
+  const toggleDatePicker = () => {
+    setShowPicker(!showPicker);
+  };
+
+  const onChange = ({ type }, selectedDate) => {
+    if (type === "set") {
+      const currentDate = selectedDate;
+      setDate(currentDate);
+      console.log(currentDate.toString());
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+        setDateOfBirth(
+          currentDate.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        );
+      }
+    } else {
+      toggleDatePicker();
+    }
   };
 
   const handleValidatePassword = (text) => {
@@ -89,24 +113,27 @@ const SignUpScreen = ({ navigation }) => {
           <View
             style={[
               styles.inputView,
-              checkEmptyGmail ? { borderWidth: 1, borderColor: "red" } : {},
+              checkEmptyPhoneNumber
+                ? { borderWidth: 1, borderColor: "red" }
+                : {},
             ]}
           >
             <FontAwesome5
               style={styles.inputIcon}
-              name="user"
+              name="phone"
               type="ionicons"
               color="#E94057"
             />
             <TextInput
-              placeholder="Gmail"
+              placeholder="Phone Number"
               autoCapitalize="none"
               style={styles.input}
-              value={gmail}
+              value={phoneNumBer}
               onChangeText={(text) => {
-                setGmail(text);
-                setCheckEmptyGmail(false);
+                setPhoneNumber(text);
+                setCheckEmptyPhoneNumber(false);
               }}
+              keyboardType="numeric"
             />
           </View>
 
@@ -154,22 +181,6 @@ const SignUpScreen = ({ navigation }) => {
           <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
-
-          <View style={{ flexDirection: "row", marginTop: 8 }}>
-            <Text>Or</Text>
-            <TouchableOpacity onPress={handleSignUpByPhoneNumber}>
-              <Text
-                style={{
-                  color: RED_COLOR,
-                  fontStyle: "italic",
-                  textDecorationLine: "underline",
-                  marginLeft: 4,
-                }}
-              >
-                Sign up by phone number{"->"}
-              </Text>
-            </TouchableOpacity>
-          </View>
 
           <View style={{ flexDirection: "row", marginTop: 8 }}>
             <Text>Have an account?</Text>

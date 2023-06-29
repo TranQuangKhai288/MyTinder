@@ -11,7 +11,7 @@ import {
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useFonts } from "expo-font";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
-//import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { Alert } from "react-native";
 import { RED_COLOR } from "../constants/color";
 

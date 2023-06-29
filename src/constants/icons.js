@@ -33,6 +33,7 @@ import RedExtreme from "../assets/icons/red-extreme.svg";
 import RedMusic from "../assets/icons/red-music.svg";
 import RedDrink from "../assets/icons/red-drink.svg";
 import RedGame from "../assets/icons/red-game.svg";
+import WhiteGB from "../assets/icons/white-bg.svg";
 
 export const LogoIcon = Logo.toString();
 export const RightArrowIcon = RightArrow.toString();
@@ -69,3 +70,4 @@ export const RedExtremeIcon = RedExtreme.toString();
 export const RedMusicIcon = RedMusic.toString();
 export const RedDrinkIcon = RedDrink.toString();
 export const RedGameIcon = RedGame.toString();
+export const WhiteGBIcon = WhiteGB.toString();
