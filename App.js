@@ -13,6 +13,9 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "./src/screens/SplashScreen";
 import OtherProfileScreen from "./src/screens/OtherProfileScreen";
 import SetUpProfile1 from "./src/screens/SetUpProfile1";
+import SetUpProfile2 from "./src/screens/SetUpProfile2";
+import SetUpProfile3 from "./src/screens/SetUpProfile3";
+import OTPInputScreen from "./src/screens/OTPInputScreen";
 
 export default function App() {
   const [fonsLoaded] = useFonts(SOURCE_SANS_PRO);
@@ -29,7 +32,7 @@ export default function App() {
         {/* <NavigationContainer>
           <Stack />
         </NavigationContainer> */}
-        <SetUpProfile1 />
+        <OTPInputScreen />
       </Provider>
     </SafeAreaProvider>
   );

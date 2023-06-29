@@ -11,7 +11,11 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
 import { CameraIcon } from "../constants/icons";
-import { LIGHT_RED_COLOR, RED_COLOR } from "../constants/color";
+import {
+  LIGHT_GRAY_COLOR,
+  LIGHT_RED_COLOR,
+  RED_COLOR,
+} from "../constants/color";
 import { TextInput } from "react-native";
 
 const SetUpProfile1 = () => {
@@ -29,7 +33,7 @@ const SetUpProfile1 = () => {
       ]}
     >
       <View style={styles.header_wrapper}>
-        <Text style={styles.header_text}>Set up your profile</Text>
+        <Text style={styles.header_text}>Your profile</Text>
       </View>
       <View style={styles.body_wrapper}>
         <View style={styles.avatar_wrapper}>
@@ -77,10 +81,14 @@ const SetUpProfile1 = () => {
 
 const styles = StyleSheet.create({
   container: {},
-  header_wrapper: { justifyContent: "center", alignItems: "left" },
+  header_wrapper: {
+    justifyContent: "center",
+    alignItems: "left",
+    marginTop: 40,
+  },
   header_text: {
     fontFamily: "SourceSansProBold",
-    fontSize: 32,
+    fontSize: 40,
   },
   body_wrapper: {
     marginTop: 80,
@@ -104,12 +112,12 @@ const styles = StyleSheet.create({
     right: 0,
   },
   name_wrapper: { width: "100%", marginTop: 16 },
-  name_header_wrapper: {},
-  name_header_text: { fontFamily: "SourceSansProRegular", fontSize: 18 },
+  name_header_wrapper: { marginBottom: 8 },
+  name_header_text: { fontFamily: "SourceSansProSemiBold", fontSize: 18 },
   name_input_wrapper: {},
   name_input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: LIGHT_GRAY_COLOR,
     paddingVertical: 16,
     borderRadius: 12,
     paddingHorizontal: 16,
