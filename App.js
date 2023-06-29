@@ -29,10 +29,9 @@ export default function App() {
         {/* <View style={styles.container}>
         
       </View> */}
-        {/* <NavigationContainer>
+        <NavigationContainer>
           <Stack />
-        </NavigationContainer> */}
-        <OTPInputScreen />
+        </NavigationContainer>
       </Provider>
     </SafeAreaProvider>
   );
