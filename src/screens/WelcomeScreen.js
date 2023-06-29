@@ -4,6 +4,7 @@ import { SvgXml } from "react-native-svg";
 import { LogoIcon } from "../constants/icons";
 import { StatusBar } from "expo-status-bar";
 import { RED_COLOR } from "../constants/color";
+import { SCREEN_WIDTH } from "../constants/constants";
 
 const WelcomeScreen = ({ navigation }) => {
   const handleLogin = () => {
@@ -20,12 +21,23 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={styles.wrapper}>
         <View style={{ flex: 0.7, alignItems: "center" }}>
           <SvgXml xml={LogoIcon} />
-          <Text style={{ marginTop: 64, fontWeight: "bold", fontSize: 18 }}>
+          <Text style={{ marginTop: 64, fontFamily: "LatoBold", fontSize: 18 }}>
             Sign up to continue
           </Text>
-          <TouchableOpacity style={styles.button}>
-            <Text style={{ color: "#fff", fontSize: 18, fontWeight: "bold" }}>
-              Sign up with Google
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+              navigation.navigate("SignUpScreenByPhoneNumber");
+            }}
+          >
+            <Text
+              style={{
+                color: "#fff",
+                fontSize: 16,
+                fontFamily: "LatoBold",
+              }}
+            >
+              Use phone number
             </Text>
           </TouchableOpacity>
 
@@ -35,23 +47,31 @@ const WelcomeScreen = ({ navigation }) => {
               borderRadius: 16,
               marginTop: 16,
               paddingVertical: 16,
-              paddingHorizontal: 70,
+              width: SCREEN_WIDTH * 0.68,
+              justifyContent: "center",
+              alignItems: "center",
               borderColor: "#C0C0C0",
               borderWidth: 1,
             }}
             onPress={handleSignUp}
           >
             <Text
-              style={{ color: RED_COLOR, fontSize: 18, fontWeight: "bold" }}
+              style={{
+                color: RED_COLOR,
+                fontSize: 16,
+                fontFamily: "LatoBold",
+              }}
             >
-              Create an account
+              Use email
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={handleLogin}>
-            <Text style={{ marginTop: 64, fontSize: 16 }}>
+            <Text
+              style={{ marginTop: 64, fontSize: 16, fontFamily: "LatoRegular" }}
+            >
               Already have an account?{" "}
-              <Text style={{ color: RED_COLOR, fontWeight: "bold" }}>
+              <Text style={{ color: RED_COLOR, fontFamily: "LatoBold" }}>
                 Sign in
               </Text>
             </Text>
@@ -77,7 +97,9 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     marginTop: 32,
     paddingVertical: 16,
-    paddingHorizontal: 64,
+    width: SCREEN_WIDTH * 0.68,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
