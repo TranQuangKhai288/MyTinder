@@ -6,10 +6,14 @@ const userInitialState = {
     firstName: null,
     lastName: null,
     email: null,
+    phoneNumber: null,
     avatar: null,
     isVerified: false,
     isLogin: false,
     docID: null,
+    matches: [],
+    beMatched: [],
+    chats: [],
   },
 };
 

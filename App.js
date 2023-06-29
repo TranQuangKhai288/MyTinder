@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import Stack from "./src/navigator/Stack";
 import React from "react";
 import { useFonts } from "expo-font";
-import { SOURCE_SANS_PRO } from "./src/constants/fonts";
+import { FONTS } from "./src/constants/fonts";
 import StartScreen from "./src/screens/StartScreen";
 import TestScreen from "./src/screens/TestScreen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -16,9 +16,10 @@ import SetUpProfile1 from "./src/screens/SetUpProfile1";
 import SetUpProfile2 from "./src/screens/SetUpProfile2";
 import SetUpProfile3 from "./src/screens/SetUpProfile3";
 import OTPInputScreen from "./src/screens/OTPInputScreen";
+import LoadingScreen from "./src/screens/LoadingScreen";
 
 export default function App() {
-  const [fonsLoaded] = useFonts(SOURCE_SANS_PRO);
+  const [fonsLoaded] = useFonts(FONTS);
   if (!fonsLoaded) {
     return null;
   }
@@ -32,6 +33,7 @@ export default function App() {
         <NavigationContainer>
           <Stack />
         </NavigationContainer>
+        {/* <LoadingScreen /> */}
       </Provider>
     </SafeAreaProvider>
   );
