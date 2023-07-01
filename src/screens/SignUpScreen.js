@@ -18,15 +18,34 @@ import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { RED_COLOR } from "../constants/color";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import PopUpNotificationDialog from "./PopUpNotificationDialog";
+import { useSelector } from "react-redux";
+import { addUserToFirestore, registerUser } from "../firebase/user";
+import LoadingScreen from "./LoadingScreen";
 const SignUpScreen = ({ navigation }) => {
+  const userState = useSelector((state) => state.user.user);
   //text input states
   const [gmail, setGmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkEmptyGmail, setCheckEmptyGmail] = useState(false);
   const [checkEmptyPassword, setCheckEmptyPassword] = useState(false);
   const [checkSamePassword, setCheckSamePassword] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpMessage, setPopUpMessage] = useState({
+    title: "",
+    content: "",
+  });
 
-  const handleSignUp = () => {
+  const showAlert = (title, content) => {
+    setShowPopUp(true);
+    setPopUpMessage({
+      title: title,
+      content: content,
+    });
+  };
+
+  const handleSignUp = async () => {
     if (gmail === "") {
       setCheckEmptyGmail(true);
     }
@@ -34,15 +53,23 @@ const SignUpScreen = ({ navigation }) => {
       setCheckEmptyPassword(true);
     }
     if (checkSamePassword === false) {
-      Alert.alert("Password is not the same");
     } else {
-      createUserWithEmailAndPassword(FIREBASE_AUTH, gmail, password)
-        .then((userCredential) => {
-          console.log("User created!");
-        })
-        .catch((error) => {
-          console.log("Error creating user:", error);
-        });
+      setIsLoading(true);
+      let user = userState;
+      user.email = gmail;
+      user.succesfulRegister = false;
+      try {
+        await registerUser(user, password, showAlert);
+        if (user.succesfulRegister) {
+          console.log("Register successful");
+          await addUserToFirestore(user);
+          navigation.navigate("LoginScreen");
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.log("Error register user: ", error);
+        setIsLoading(false);
+      }
     }
   };
 
@@ -61,12 +88,6 @@ const SignUpScreen = ({ navigation }) => {
       setCheckSamePassword(true);
     }
   };
-
-  const [fontsLoaded] = useFonts({
-    SourceSansProBold: require("../assets/fonts/SourceSansPro-Bold.ttf"),
-    SourceSansProRegular: require("../assets/fonts/SourceSansPro-Regular.ttf"),
-  });
-  if (!fontsLoaded) return undefined;
 
   return (
     <View style={styles.container}>
@@ -188,6 +209,15 @@ const SignUpScreen = ({ navigation }) => {
           </View>
         </View>
       </View>
+      <PopUpNotificationDialog
+        visible={showPopUp}
+        onRequestClose={() => {
+          setShowPopUp(false);
+        }}
+        title={popUpMessage.title}
+        message={popUpMessage.content}
+      />
+      <LoadingScreen visible={isLoading} />
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -17,9 +17,23 @@ import {
   RED_COLOR,
 } from "../constants/color";
 import { TextInput } from "react-native";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  userUpdateFirstName,
+  userUpdateLastName,
+} from "../redux/actions/userActions";
 
-const SetUpProfile1 = () => {
+const SetUpProfile1 = ({ navigation }) => {
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const inset = useSafeAreaInsets();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [birthday, setBirthday] = useState("");
+  const [isSetFirstName, setIsSetFirstName] = useState(true);
+  const [isSetLastName, setIsSetLastName] = useState(true);
+  const [enableNextButton, setEnableNextButton] = useState(true);
   return (
     <View
       style={[
@@ -38,7 +52,7 @@ const SetUpProfile1 = () => {
       <View style={styles.body_wrapper}>
         <View style={styles.avatar_wrapper}>
           <ImageBackground
-            source={require("../assets/images/test-gallery1.png")}
+            source={require("../assets/images/avatar-default.png")}
             style={styles.avatar}
             borderRadius={60}
           >
@@ -52,16 +66,56 @@ const SetUpProfile1 = () => {
             <Text style={styles.name_header_text}>First name</Text>
           </View>
           <View style={styles.name_input_wrapper}>
-            <TextInput style={styles.name_input} />
+            <TextInput
+              style={[
+                styles.name_input,
+                isSetFirstName
+                  ? { borderColor: LIGHT_GRAY_COLOR }
+                  : { borderColor: "red" },
+              ]}
+              onChangeText={(text) => {
+                setFirstName(text);
+              }}
+              onFocus={() => {
+                setIsSetFirstName(true);
+              }}
+            />
           </View>
+          {isSetFirstName ? null : (
+            <View style={styles.name_error_wrapper}>
+              <Text style={styles.name_error_text}>
+                * You must enter you first name
+              </Text>
+            </View>
+          )}
         </View>
         <View style={styles.name_wrapper}>
           <View style={styles.name_header_wrapper}>
             <Text style={styles.name_header_text}>Last name</Text>
           </View>
           <View style={styles.name_input_wrapper}>
-            <TextInput style={styles.name_input} />
+            <TextInput
+              style={[
+                styles.name_input,
+                isSetLastName
+                  ? { borderColor: LIGHT_GRAY_COLOR }
+                  : { borderColor: "red" },
+              ]}
+              onChangeText={(text) => {
+                setLastName(text);
+              }}
+              onFocus={() => {
+                setIsSetLastName(true);
+              }}
+            />
           </View>
+          {isSetLastName ? null : (
+            <View style={styles.name_error_wrapper}>
+              <Text style={styles.name_error_text}>
+                * You must enter you last name
+              </Text>
+            </View>
+          )}
         </View>
         <View style={styles.choose_birthday_wrapper}>
           <Text style={{ fontSize: 18, fontFamily: "SourceSansProRegular" }}>
@@ -70,7 +124,24 @@ const SetUpProfile1 = () => {
         </View>
       </View>
       <View style={styles.footer_wrapper}>
-        <TouchableOpacity style={styles.footer_button}>
+        <TouchableOpacity
+          disabled={!enableNextButton}
+          style={styles.footer_button}
+          onPress={() => {
+            if (firstName.length === 0) {
+              setIsSetFirstName(false);
+            }
+            if (lastName.length === 0) {
+              setIsSetLastName(false);
+            }
+            if (firstName !== "" && lastName !== "") {
+              setEnableNextButton(false);
+              dispatch(userUpdateFirstName(firstName));
+              dispatch(userUpdateLastName(lastName));
+              navigation.navigate("SetUpProfile2");
+            }
+          }}
+        >
           <Text style={styles.footer_button_text}>Confirm</Text>
         </TouchableOpacity>
       </View>
@@ -87,7 +158,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   header_text: {
-    fontFamily: "SourceSansProBold",
+    fontFamily: "LatoBlack",
     fontSize: 40,
   },
   body_wrapper: {
@@ -99,8 +170,11 @@ const styles = StyleSheet.create({
     height: 120,
     width: 120,
     position: "relative",
+    borderWidth: 2,
+    borderColor: LIGHT_GRAY_COLOR,
+    borderRadius: 60,
   },
-  avatar: { height: 120, width: 120 },
+  avatar: { height: 116, width: 116 },
   choose_avatar_button: {
     position: "absolute",
     backgroundColor: RED_COLOR,
@@ -113,16 +187,15 @@ const styles = StyleSheet.create({
   },
   name_wrapper: { width: "100%", marginTop: 16 },
   name_header_wrapper: { marginBottom: 8 },
-  name_header_text: { fontFamily: "SourceSansProSemiBold", fontSize: 18 },
+  name_header_text: { fontFamily: "LatoBold", fontSize: 18 },
   name_input_wrapper: {},
   name_input: {
     borderWidth: 1,
-    borderColor: LIGHT_GRAY_COLOR,
     paddingVertical: 16,
     borderRadius: 12,
     paddingHorizontal: 16,
     fontSize: 16,
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
   },
   choose_birthday_wrapper: {
     width: "100%",
@@ -134,7 +207,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   footer_wrapper: {
-    marginTop: 100,
+    marginTop: 60,
   },
   footer_button: {
     backgroundColor: RED_COLOR,
@@ -145,9 +218,11 @@ const styles = StyleSheet.create({
   },
   footer_button_text: {
     fontSize: 18,
-    fontFamily: "SourceSansProSemiBold",
+    fontFamily: "LatoBold",
     color: "#fff",
   },
+  name_error_wrapper: {},
+  name_error_text: { fontFamily: "LatoItalic", color: "red", fontSize: 14 },
 });
 
 export default SetUpProfile1;

@@ -34,6 +34,7 @@ import RedMusic from "../assets/icons/red-music.svg";
 import RedDrink from "../assets/icons/red-drink.svg";
 import RedGame from "../assets/icons/red-game.svg";
 import WhiteGB from "../assets/icons/white-bg.svg";
+import DeafaultAvatar from "../assets/images/default-avatar.svg";
 
 export const LogoIcon = Logo.toString();
 export const RightArrowIcon = RightArrow.toString();
@@ -71,3 +72,4 @@ export const RedMusicIcon = RedMusic.toString();
 export const RedDrinkIcon = RedDrink.toString();
 export const RedGameIcon = RedGame.toString();
 export const WhiteGBIcon = WhiteGB.toString();
+export const DeafaultAvatarIcon = DeafaultAvatar.toString();

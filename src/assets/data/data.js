@@ -115,3 +115,22 @@ export const interests = [
     icon: RedGameIcon,
   },
 ];
+
+export const gender = [
+  {
+    id: 1,
+    name: "Woman",
+  },
+  {
+    id: 2,
+    name: "Man",
+  },
+  {
+    id: 3,
+    name: "Other",
+  },
+  {
+    id: 4,
+    name: "I don't want to mention it",
+  },
+];

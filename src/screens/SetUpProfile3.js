@@ -12,13 +12,19 @@ import { SvgXml } from "react-native-svg";
 import { RedRightArrowIcon } from "../constants/icons";
 import { LIGHT_GRAY_COLOR, RED_COLOR } from "../constants/color";
 import { interests } from "../assets/data/data";
+import { useSelector, useDispatch } from "react-redux";
+import { userUpdateInterests } from "../redux/actions/userActions";
 
-const SetUpProfile3 = () => {
+const SetUpProfile3 = ({ navigation }) => {
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const inset = useSafeAreaInsets();
   const [selectedInterestID, setSelectedInterestID] = useState([]);
+  const [enableNextButton, setEnableNextButton] = useState(true);
   useEffect(() => {
-    setSelectedInterestID([]);
+    setSelectedInterestID(user.interests);
   }, []);
+  console.log(user);
   return (
     <View
       style={[
@@ -31,7 +37,12 @@ const SetUpProfile3 = () => {
         styles.container,
       ]}
     >
-      <TouchableOpacity style={styles.back_button_wrapper}>
+      <TouchableOpacity
+        style={styles.back_button_wrapper}
+        onPress={() => {
+          navigation.navigate("SetUpProfile2");
+        }}
+      >
         <SvgXml xml={RedRightArrowIcon} height={24} width={24} />
       </TouchableOpacity>
       <View style={styles.header_wrapper}>
@@ -113,8 +124,16 @@ const SetUpProfile3 = () => {
         </View>
       </View>
       <View style={styles.footer_wrapper}>
-        <TouchableOpacity style={styles.footer_button}>
-          <Text style={styles.footer_button_text}>Confirm</Text>
+        <TouchableOpacity
+          style={styles.footer_button}
+          disabled={!enableNextButton}
+          onPress={() => {
+            setEnableNextButton(false);
+            dispatch(userUpdateInterests(selectedInterestID));
+            navigation.navigate("BottomTab");
+          }}
+        >
+          <Text style={styles.footer_button_text}>Done</Text>
         </TouchableOpacity>
       </View>
       <StatusBar style="dark" />
@@ -139,11 +158,11 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   header_text: {
-    fontFamily: "SourceSansProBold",
+    fontFamily: "LatoBlack",
     fontSize: 32,
   },
   header_decription_text: {
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
   },
   body_wrapper: {
@@ -165,7 +184,7 @@ const styles = StyleSheet.create({
   interest_item_icon: {},
   interest_item_name: { marginLeft: 8 },
   interest_item_name_text: {
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
   },
   select_clear_all_button_wrapper: {
@@ -187,7 +206,7 @@ const styles = StyleSheet.create({
     backgroundColor: RED_COLOR,
   },
   select_all_button_text: {
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
     color: "#fff",
   },
@@ -203,7 +222,7 @@ const styles = StyleSheet.create({
     margin: 4,
     borderColor: LIGHT_GRAY_COLOR,
   },
-  clear_all_button_text: { fontFamily: "SourceSansProRegular", fontSize: 16 },
+  clear_all_button_text: { fontFamily: "LatoRegular", fontSize: 16 },
   footer_wrapper: {
     marginTop: 40,
   },
@@ -216,7 +235,7 @@ const styles = StyleSheet.create({
   },
   footer_button_text: {
     fontSize: 18,
-    fontFamily: "SourceSansProSemiBold",
+    fontFamily: "LatoBold",
     color: "#fff",
   },
 });

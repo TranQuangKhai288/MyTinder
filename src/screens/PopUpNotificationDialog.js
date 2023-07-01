@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     width: 224,
     overflow: "hidden",
   },
-  header_wrapper: { padding: 10 },
+  header_wrapper: { paddingVertical: 12, paddingHorizontal: 16 },
   header_text: {
     fontSize: 18,
     textAlign: "center",
@@ -65,7 +65,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    padding: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     width: "100%",
     borderTopWidth: 1,
     borderColor: "#dddddd",

@@ -7,9 +7,31 @@ import WelcomeScreen from "../screens/WelcomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import OtherProfileScreen from "../screens/OtherProfileScreen";
 import SignUpScreenByPhoneNumber from "../screens/SignUpScreenByPhoneNumber";
+import SetUpProfileStack from "./SetUpProfileStack";
+import { useDispatch } from "react-redux";
+import { onAuthStateChanged } from "firebase/auth";
+import { FIREBASE_AUTH } from "../../firebaseConfig";
+import { userLogin, userLogout } from "../redux/actions/userActions";
+import StartScreen from "../screens/StartScreen";
 
 const stack = createStackNavigator();
 const Stack = () => {
+  const dispatch = useDispatch();
+  onAuthStateChanged(FIREBASE_AUTH, (user) => {
+    if (user) {
+      // User is signed in
+      console.log("User is signed in");
+      if (user.emailVerified) {
+        dispatch(userLogin());
+        console.log("User is signed in, verified");
+      }
+    } else {
+      // User is signed out
+      console.log("User is signed out");
+      dispatch(userLogout());
+    }
+  });
+
   return (
     <stack.Navigator
       screenOptions={() => ({
@@ -17,7 +39,7 @@ const Stack = () => {
           null;
         },
       })}
-      initialRouteName="WelcomeScreen"
+      initialRouteName="StartScreen"
     >
       <stack.Screen name="BottomTab" component={BottomTab} />
       <stack.Screen name="LoginScreen" component={LoginScreen} />
@@ -27,8 +49,9 @@ const Stack = () => {
         name="SignUpScreenByPhoneNumber"
         component={SignUpScreenByPhoneNumber}
       />
-
+      <stack.Screen name="SetUpProfile" component={SetUpProfileStack} />
       <stack.Screen name="OtherProfileScreen" component={OtherProfileScreen} />
+      <stack.Screen name="StartScreen" component={StartScreen} />
     </stack.Navigator>
   );
 };

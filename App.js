@@ -17,11 +17,12 @@ import SetUpProfile2 from "./src/screens/SetUpProfile2";
 import SetUpProfile3 from "./src/screens/SetUpProfile3";
 import OTPInputScreen from "./src/screens/OTPInputScreen";
 import LoadingScreen from "./src/screens/LoadingScreen";
+import SetUpProfileStack from "./src/navigator/SetUpProfileStack";
 
 export default function App() {
   const [fonsLoaded] = useFonts(FONTS);
   if (!fonsLoaded) {
-    return null;
+    return <LoadingScreen />;
   }
 
   return (
@@ -32,8 +33,8 @@ export default function App() {
       </View> */}
         <NavigationContainer>
           <Stack />
+          {/* <SetUpProfileStack /> */}
         </NavigationContainer>
-        {/* <LoadingScreen /> */}
       </Provider>
     </SafeAreaProvider>
   );

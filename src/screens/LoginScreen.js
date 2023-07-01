@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -6,49 +6,92 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
-  Dimensions,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { useFonts } from "expo-font";
-import { FIREBASE_AUTH } from "../../firebaseConfig";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { Alert } from "react-native";
 import { RED_COLOR } from "../constants/color";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  userLogin,
+  userLogout,
+  userUpdateState,
+} from "../redux/actions/userActions";
+import {
+  findUserDocumentIdFromFirestore,
+  fetchUserData,
+  updateUserVerifyToFirestore,
+  loginUser,
+  logoutUser,
+} from "../firebase/user";
+import { useFocusEffect } from "@react-navigation/native";
+import LoadingScreen from "./LoadingScreen";
+import PopUpNotificationDialog from "./PopUpNotificationDialog";
 
 const LoginScreen = ({ navigation }) => {
   console.log("LoginScreen");
-  const [isLogin, setIsLogin] = useState(false);
+  const userState = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+  const [enableNextButton, setEnableNextButton] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
+  const [popUpMessage, setPopUpMessage] = useState({
+    title: "",
+    content: "",
+  });
   //text input states
   const [gmail, setGmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkEmptyGmail, setCheckEmptyGmail] = useState(false);
   const [checkEmptyPassword, setCheckEmptyPassword] = useState(false);
-  const handleLogin = () => {
-    if (gmail === "") {
-      setCheckEmptyGmail(true);
+  const showPopUpMessage = (title, message) => {
+    setShowPopUp(true);
+    setPopUpMessage({
+      title: title,
+      content: message,
+    });
+  };
+  const handleLogin = async () => {
+    if (gmail === "" || password === "") {
+      if (gmail === "") {
+        setCheckEmptyGmail(true);
+      }
+      if (password === "") {
+        setCheckEmptyPassword(true);
+      }
+    } else {
+      setIsLoading(true);
+      setEnableNextButton(false);
+      dispatch(userLogout());
+      logoutUser();
+      let user = userState;
+      user.email = gmail;
+      const docID = await findUserDocumentIdFromFirestore(gmail);
+      user.docID = docID;
+      console.log("docID: ", docID);
+      try {
+        await loginUser(user, password, showPopUpMessage);
+        if (user.isVerified) {
+          await updateUserVerifyToFirestore(user);
+          await fetchUserData(user);
+          console.log("Login successful");
+          dispatch(userUpdateState(user));
+          dispatch(userLogin());
+          if (userState.isSetUp) {
+            navigation.navigate("BottomTab");
+          } else {
+            navigation.navigate("SetUpProfile");
+          }
+          setIsLoading(false);
+        } else {
+          console.log("Login unsuccessful");
+          setIsLoading(false);
+          setEnableNextButton(true);
+        }
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+        setEnableNextButton(true);
+      }
     }
-    if (password === "") {
-      setCheckEmptyPassword(true);
-    }
-
-    signInWithEmailAndPassword(FIREBASE_AUTH, gmail, password)
-      .then(() => {
-        setIsLogin(true);
-        console.log("User logged in!");
-        navigation.navigate("BottomTab");
-      })
-      .catch((error) => {
-        console.log("Error logging in:", error);
-        if (error.code === "auth/user-not-found") {
-          Alert.alert("User not found");
-        }
-        if (error.code === "auth/invalid-email") {
-          Alert.alert("Invalid email");
-        }
-        if (error.code === "auth/wrong-password") {
-          Alert.alert("Wrong password");
-        }
-      });
   };
 
   const handleSignUp = () => {
@@ -58,8 +101,16 @@ const LoginScreen = ({ navigation }) => {
 
   const handleForgot = () => {
     // Perform login logic here
-    navigation.navigate("ForgotPassScreen");
+    // navigation.navigate("ForgotPassScreen");
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      setEnableNextButton(true);
+      setIsLoading(false);
+      console.log("useFocusEffect");
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
@@ -131,7 +182,11 @@ const LoginScreen = ({ navigation }) => {
             <Text style={styles.fpText}>Forgot Password?</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={handleLogin}
+            disabled={!enableNextButton}
+          >
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
 
@@ -152,6 +207,15 @@ const LoginScreen = ({ navigation }) => {
           </View>
         </View>
       </View>
+      <PopUpNotificationDialog
+        visible={showPopUp}
+        onRequestClose={() => {
+          setShowPopUp(false);
+        }}
+        title={popUpMessage.title}
+        message={popUpMessage.content}
+      />
+      <LoadingScreen visible={isLoading} />
     </View>
   );
 };

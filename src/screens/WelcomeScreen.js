@@ -21,7 +21,9 @@ const WelcomeScreen = ({ navigation }) => {
       <View style={styles.wrapper}>
         <View style={{ flex: 0.7, alignItems: "center" }}>
           <SvgXml xml={LogoIcon} />
-          <Text style={{ marginTop: 64, fontFamily: "LatoBold", fontSize: 18 }}>
+          <Text
+            style={{ marginTop: 48, fontFamily: "LatoBlack", fontSize: 20 }}
+          >
             Sign up to continue
           </Text>
           <TouchableOpacity
@@ -78,6 +80,7 @@ const WelcomeScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
+      <StatusBar style="dark" />
     </View>
   );
 };
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: RED_COLOR,
     borderRadius: 16,
-    marginTop: 32,
+    marginTop: 56,
     paddingVertical: 16,
     width: SCREEN_WIDTH * 0.68,
     justifyContent: "center",

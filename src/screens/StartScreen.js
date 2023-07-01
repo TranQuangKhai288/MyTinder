@@ -25,12 +25,22 @@ const StartScreen = ({ navigation }) => {
         </View>
       </View>
       <View style={styles.footer_wrapper}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            navigation.navigate("WelcomeScreen");
+          }}
+        >
           <Text style={styles.button_text}>Create an account</Text>
         </TouchableOpacity>
         <View style={styles.have_account_wrapper}>
           <Text style={styles.have_account}>Already have an account? </Text>
-          <TouchableOpacity style={styles.sign_in_wrapper}>
+          <TouchableOpacity
+            style={styles.sign_in_wrapper}
+            onPress={() => {
+              navigation.navigate("LoginScreen");
+            }}
+          >
             <Text style={styles.sign_in}>Sign in</Text>
           </TouchableOpacity>
         </View>
@@ -41,7 +51,12 @@ const StartScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: "center", alignItems: "center" },
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
   image_wrapper: {
     justifyContent: "center",
     alignItems: "center",
@@ -60,13 +75,13 @@ const styles = StyleSheet.create({
   header_wrapper: {},
   header: {
     fontSize: 32,
-    fontFamily: "SourceSansProSemiBold",
+    fontFamily: "LatoBold",
     color: RED_COLOR,
   },
   description_wrapper: { width: SCREEN_WIDTH * 0.72, marginTop: 12 },
   description: {
     fontSize: 18,
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     color: "#000",
     textAlign: "center",
     lineHeight: 24,
@@ -85,7 +100,7 @@ const styles = StyleSheet.create({
   },
   button_text: {
     fontSize: 18,
-    fontFamily: "SourceSansProSemiBold",
+    fontFamily: "LatoBold",
     color: "#fff",
   },
   have_account_wrapper: {
@@ -94,11 +109,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 12,
   },
-  have_account: { fontSize: 16, fontFamily: "SourceSansProRegular" },
+  have_account: { fontSize: 16, fontFamily: "LatoRegular" },
   sign_in_wrapper: {},
   sign_in: {
     fontSize: 16,
-    fontFamily: "SourceSansProSemiBold",
+    fontFamily: "LatoBold",
     color: RED_COLOR,
   },
 });

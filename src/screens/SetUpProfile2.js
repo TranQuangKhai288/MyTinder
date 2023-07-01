@@ -21,13 +21,22 @@ import {
   LIGHT_RED_COLOR,
   RED_COLOR,
 } from "../constants/color";
+import { useSelector, useDispatch } from "react-redux";
+import { userUpdateGender } from "../redux/actions/userActions";
+import { gender } from "../assets/data/data";
 
-const SetUpProfile2 = () => {
+const SetUpProfile2 = ({ navigation }) => {
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const inset = useSafeAreaInsets();
-  const gender = ["Woman", "Man", "Other", "I don't want to mention it"];
-  const [selectedGenderID, setSelectedGenderID] = useState("0");
+  const [selectedGenderID, setSelectedGenderID] = useState(1);
+  const [enableNextButton, setEnableNextButton] = useState(true);
   useEffect(() => {
-    setSelectedGenderID("0");
+    if (user.gender === null) {
+      setSelectedGenderID(1);
+    } else {
+      setSelectedGenderID(user.gender);
+    }
   }, []);
   return (
     <View
@@ -41,7 +50,12 @@ const SetUpProfile2 = () => {
         styles.container,
       ]}
     >
-      <TouchableOpacity style={styles.back_button_wrapper}>
+      <TouchableOpacity
+        style={styles.back_button_wrapper}
+        onPress={() => {
+          navigation.navigate("SetUpProfile1");
+        }}
+      >
         <SvgXml xml={RedRightArrowIcon} height={24} width={24} />
       </TouchableOpacity>
       <View style={styles.header_wrapper}>
@@ -50,24 +64,24 @@ const SetUpProfile2 = () => {
       <View style={styles.body_wrapper}>
         <FlatList
           data={gender}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item, index }) => (
             <TouchableOpacity
               style={
-                selectedGenderID === index.toString()
+                selectedGenderID === item.id
                   ? styles.gender_wrapper_selected
                   : styles.gender_wrapper
               }
-              onPress={() => setSelectedGenderID(index.toString())}
+              onPress={() => setSelectedGenderID(item.id)}
             >
               <Text
                 style={
-                  selectedGenderID === index.toString()
+                  selectedGenderID === item.id
                     ? styles.gender_text_selected
                     : styles.gender_text
                 }
               >
-                {item}
+                {item.name}
               </Text>
               <SvgXml xml={WhiteCheckIcon} />
             </TouchableOpacity>
@@ -76,7 +90,15 @@ const SetUpProfile2 = () => {
         />
       </View>
       <View style={styles.footer_wrapper}>
-        <TouchableOpacity style={styles.footer_button}>
+        <TouchableOpacity
+          style={styles.footer_button}
+          disabled={!enableNextButton}
+          onPress={() => {
+            setEnableNextButton(false);
+            navigation.navigate("SetUpProfile3");
+            dispatch(userUpdateGender(selectedGenderID));
+          }}
+        >
           <Text style={styles.footer_button_text}>Confirm</Text>
         </TouchableOpacity>
       </View>
@@ -102,7 +124,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
   },
   header_text: {
-    fontFamily: "SourceSansProBold",
+    fontFamily: "LatoBlack",
     fontSize: 40,
   },
   body_wrapper: {
@@ -134,11 +156,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   gender_text: {
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
   },
   gender_text_selected: {
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
     color: "#fff",
   },
@@ -154,7 +176,7 @@ const styles = StyleSheet.create({
   },
   footer_button_text: {
     fontSize: 18,
-    fontFamily: "SourceSansProSemiBold",
+    fontFamily: "LatoBold",
     color: "#fff",
   },
 });
