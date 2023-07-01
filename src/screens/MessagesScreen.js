@@ -16,7 +16,6 @@ import { ScrollView } from "react-native-virtualized-view";
 import { TextInput } from "react-native-gesture-handler";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
 import { useSelector } from "react-redux";
-import database from "@react-native-firebase/database";
 import { addUserToFirestore, fetchAllUserData } from "../firebase/user";
 import { useFocusEffect } from "@react-navigation/native";
 
