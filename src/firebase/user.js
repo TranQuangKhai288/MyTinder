@@ -5,7 +5,14 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
-import { addDoc, collection, updateDoc, doc, getDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  updateDoc,
+  doc,
+  getDoc,
+  getDocs,
+} from "firebase/firestore";
 import { Alert } from "react-native";
 
 // Register user with email and password
@@ -142,5 +149,18 @@ export const updateUserVerifyToFirestore = async (user) => {
     });
   } catch (error) {
     console.log("Error updating user document: ", error);
+  }
+};
+
+export const fetchAllUserData = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(FIRESTORE_DB, "User"));
+    let users = [];
+    querySnapshot.forEach((doc) => {
+      users.push(doc.data());
+    });
+    return users;
+  } catch {
+    console.log("Error fetching all user data: ", error);
   }
 };

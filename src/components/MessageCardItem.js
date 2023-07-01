@@ -11,11 +11,9 @@ import {
 } from "react-native";
 import { BlurView } from "expo-blur";
 
-const MessageCardItem = (props) => {
-  console.log(props);
-
+const MessageCardItem = ({ id, users, enterChat }) => {
   return (
-    <View style={styles.containerCardItem}>
+    <View style={styles.containerCardItem} key={id}>
       <View style={styles.card}>
         <Image
           source={{
@@ -24,8 +22,10 @@ const MessageCardItem = (props) => {
           style={{ height: 60, width: 60, borderRadius: 30, marginLeft: 10 }}
         />
         <View style={{ marginLeft: 10, flexDirection: "column" }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Name</Text>
-          <Text style={{ fontSize: 15 }}>Message</Text>
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>{users}</Text>
+          <Text style={{ fontSize: 15 }} numberOfLines={1} ellipsizeMode="tail">
+            messages
+          </Text>
         </View>
 
         <View
