@@ -9,12 +9,12 @@ import {
   ImageBackground,
   StyleSheet,
 } from "react-native";
-import { BlurView } from "expo-blur";
 
+import { BlurView } from "expo-blur";
 import { Entypo } from "@expo/vector-icons";
 
-const CardItem = (props) => {
-  console.log(props);
+const CardItem = ({ info }) => {
+  console.log(info);
 
   return (
     <View style={styles.containerCardItem}>
@@ -22,7 +22,7 @@ const CardItem = (props) => {
       <View style={styles.card}>
         <ImageBackground
           source={{
-            uri: props.info.image,
+            uri: info.image,
           }}
           style={{
             width: Dimensions.get("window").width / 2.5,
@@ -32,12 +32,12 @@ const CardItem = (props) => {
           <View style={styles.content}>
             <View style={styles.text_wrapper}>
               <View style={styles.text_infor_wrapper}>
-                <Text style={styles.textName}>{props.info.lastname},</Text>
-                <Text style={styles.textAge}>{props.info.age}</Text>
+                <Text style={styles.textName}>{info.lastname},</Text>
+                <Text style={styles.textAge}>{info.age}</Text>
               </View>
             </View>
 
-            <BlurView style={styles.blur}>
+            <BlurView style={styles.blur} tint="dark" intensity={70}>
               <View
                 style={{
                   flexDirection: "row",

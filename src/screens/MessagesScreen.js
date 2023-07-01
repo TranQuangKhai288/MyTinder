@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  Image,
   Dimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -13,6 +14,12 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import MessageCardItem from "../components/MessageCardItem";
 import { ScrollView } from "react-native-virtualized-view";
 import { TextInput } from "react-native-gesture-handler";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
+import { useSelector } from "react-redux";
+import database from "@react-native-firebase/database";
+import { addUserToFirestore, fetchAllUserData } from "../firebase/user";
+import { useFocusEffect } from "@react-navigation/native";
+
 const DATA = [
   {
     id: 1,
@@ -33,13 +40,32 @@ const DATA = [
     status: "online",
   },
 ];
-const MessagesScreen = () => {
+const MessagesScreen = ({ navigation }) => {
+  const { userData } = useSelector((state) => state.user);
+  const [search, setSearch] = useState("");
+  const [chats, setChats] = useState([]);
+  const [allUser, setallUser] = useState([]);
+
   const insets = useSafeAreaInsets();
+  const handleChatRoom = () => {
+    // Perform login logic here
+    // navigation.navigate("ChatRoomScreen");
+  };
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      let users = await fetchAllUserData();
+      console.log("fetching users:", users);
+    };
+
+    fetchUserData();
+  }, []);
+
   return (
     <View
       style={[
         {
-          paddingTop: insets.top - 30,
+          paddingTop: insets.top,
           paddingLeft: insets.left,
           paddingRight: insets.right,
         },
@@ -53,8 +79,6 @@ const MessagesScreen = () => {
           position: "relative",
           padding: 2,
           height: 64,
-          marginTop: 16,
-          marginBottom: -12,
           flexDirection: "row",
           justifyContent: "space-between",
         }}
@@ -67,6 +91,33 @@ const MessagesScreen = () => {
           >
             Messages
           </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ justifyContent: "flex-end", marginRight: 24 }}
+          onPress={async () => {
+            await addUserToFirestore({
+              lastName: "Test",
+              firstName: "Test",
+              avatar: "Test",
+              email: "Test",
+              id: "Test",
+              isVerified: true,
+            });
+          }}
+        >
+          <Image
+            source={{
+              uri: "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+            }}
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+              alignItems: "center",
+              marginBottom: 8,
+            }}
+          />
         </TouchableOpacity>
       </View>
       {/* end of header */}
@@ -117,7 +168,7 @@ const MessagesScreen = () => {
             data={DATA}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity>
+              <TouchableOpacity onPress={handleChatRoom}>
                 <MessageCardItem info={item} />
               </TouchableOpacity>
             )}

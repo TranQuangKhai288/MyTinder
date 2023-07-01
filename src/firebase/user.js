@@ -202,3 +202,16 @@ export const updateUserSetUpToFirestore = async (user) => {
     console.log("Error updating user document: ", error);
   }
 };
+
+export const fetchAllUserData = async () => {
+  try {
+    const querySnapshot = await getDocs(collection(FIRESTORE_DB, "User"));
+    let users = [];
+    querySnapshot.forEach((doc) => {
+      users.push(doc.data());
+    });
+    return users;
+  } catch {
+    console.log("Error fetching all user data: ", error);
+  }
+};

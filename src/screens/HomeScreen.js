@@ -129,7 +129,7 @@ const HomeScreen = ({ navigation }) => {
     <View
       style={[
         {
-          paddingTop: insets.top - 30,
+          paddingTop: insets.top,
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
@@ -144,7 +144,6 @@ const HomeScreen = ({ navigation }) => {
           position: "relative",
           padding: 2,
           height: 64,
-          marginTop: 16,
           marginBottom: -12,
           flexDirection: "row",
           justifyContent: "space-between",

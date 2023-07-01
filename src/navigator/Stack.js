@@ -6,6 +6,7 @@ import LoginScreen from "../screens/LoginScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import OtherProfileScreen from "../screens/OtherProfileScreen";
+import ChatRoomScreen from "../screens/ChatRoomScreen";
 import SignUpScreenByPhoneNumber from "../screens/SignUpScreenByPhoneNumber";
 import SetUpProfileStack from "./SetUpProfileStack";
 import { useDispatch } from "react-redux";
@@ -52,6 +53,7 @@ const Stack = () => {
       <stack.Screen name="SetUpProfile" component={SetUpProfileStack} />
       <stack.Screen name="OtherProfileScreen" component={OtherProfileScreen} />
       <stack.Screen name="StartScreen" component={StartScreen} />
+      <stack.Screen name="ChatRoomScreen" component={ChatRoomScreen} />
     </stack.Navigator>
   );
 };

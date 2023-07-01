@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  Image,
   Dimensions,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -135,7 +136,7 @@ const MatchesScreen = ({ navigation }) => {
     <View
       style={[
         {
-          paddingTop: insets.top - 30,
+          paddingTop: insets.top,
           paddingLeft: insets.left,
           paddingRight: insets.right,
         },
@@ -149,7 +150,6 @@ const MatchesScreen = ({ navigation }) => {
           position: "relative",
           padding: 2,
           height: 64,
-          marginTop: 16,
           marginBottom: -12,
           flexDirection: "row",
           justifyContent: "space-between",
@@ -163,6 +163,23 @@ const MatchesScreen = ({ navigation }) => {
           >
             Matches
           </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ justifyContent: "flex-end", marginRight: 24 }}
+        >
+          <Image
+            source={{
+              uri: "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+            }}
+            style={{
+              height: 40,
+              width: 40,
+              borderRadius: 20,
+              alignItems: "center",
+              marginBottom: 8,
+            }}
+          />
         </TouchableOpacity>
       </View>
       {/* end of header */}
