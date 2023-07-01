@@ -95,16 +95,16 @@ const MessagesScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={{ justifyContent: "flex-end", marginRight: 24 }}
-          onPress={async () => {
-            await addUserToFirestore({
-              lastName: "Test",
-              firstName: "Test",
-              avatar: "Test",
-              email: "Test",
-              id: "Test",
-              isVerified: true,
-            });
-          }}
+          // onPress={async () => {
+          //   await addUserToFirestore({
+          //     lastName: "Test",
+          //     firstName: "Test",
+          //     avatar: "Test",
+          //     email: "Test",
+          //     id: "Test",
+          //     isVerified: true,
+          //   });
+          // }}
         >
           <Image
             source={{

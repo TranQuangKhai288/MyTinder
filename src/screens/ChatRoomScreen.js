@@ -35,6 +35,35 @@ const ChatRoomScreen = () => {
     });
   }, [navigation]);
 
+  useLayoutEffect(() => {
+    const collectionRef = collection(database, "chats");
+    const q = query(collectionRef, orderBy("createdAt", "desc"));
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const messagesFirestore = querySnapshot.docs.map((doc) => {
+        const data = doc.data();
+        const returnData = {
+          ...data,
+          createdAt: data.createdAt.toDate(),
+        };
+        return returnData;
+      });
+      setMessages(messagesFirestore);
+    });
+    return unsubscribe;
+  }, []);
+
+  const sendMessage = async () => {
+    const { uid, photoURL } = auth.currentUser;
+    await addDoc(collection(database, "chats"), {
+      text: formValue,
+      createdAt: serverTimestamp(),
+      uid,
+      photoURL,
+    });
+    setFormValue("");
+    dummy.current.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <View>
       <Text>Chat Room</Text>
