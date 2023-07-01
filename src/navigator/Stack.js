@@ -10,10 +10,10 @@ import ChatRoomScreen from "../screens/ChatRoomScreen";
 import SignUpScreenByPhoneNumber from "../screens/SignUpScreenByPhoneNumber";
 import SetUpProfileStack from "./SetUpProfileStack";
 import { useDispatch } from "react-redux";
-import { onAuthStateChanged } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { userLogin, userLogout } from "../redux/actions/userActions";
 import StartScreen from "../screens/StartScreen";
+import { onAuthStateChanged } from "firebase/auth";
 
 const stack = createStackNavigator();
 const Stack = () => {
