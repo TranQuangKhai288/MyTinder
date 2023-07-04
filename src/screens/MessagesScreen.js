@@ -32,15 +32,15 @@ const DATA = [
   {
     id: 2,
     image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+      "https://i.pinimg.com/736x/0b/22/97/0b2297a3c2d1006d93592c295cd4791b.jpg",
     firstname: "Tran Quang",
-    lastname: "Khai",
+    lastname: "Tam",
     age: 20,
     status: "online",
   },
 ];
 const MessagesScreen = ({ navigation }) => {
-  const { userData } = useSelector((state) => state.user);
+  const currentUser = useSelector((state) => state.user.user);
   const [search, setSearch] = useState("");
   const [chats, setChats] = useState([]);
   const [allUser, setallUser] = useState([]);
@@ -48,13 +48,21 @@ const MessagesScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const handleChatRoom = () => {
     // Perform login logic here
-    // navigation.navigate("ChatRoomScreen");
+    navigation.navigate("ChatRoomScreen");
   };
 
+  const searchUser = (val) => {
+    // setSearch(val);
+    // const filteredList = users.filter((item) =>
+    //   item.name.toLowerCase().includes(text.toLowerCase())
+    // );
+    // setallUser(filteredList);
+  };
   useEffect(() => {
     const fetchUserData = async () => {
       let users = await fetchAllUserData();
-      console.log("fetching users:", users);
+      setallUser(users.filter((item) => item.id !== currentUser.id));
+      console.log("all user", allUser);
     };
 
     fetchUserData();
@@ -94,16 +102,6 @@ const MessagesScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={{ justifyContent: "flex-end", marginRight: 24 }}
-          // onPress={async () => {
-          //   await addUserToFirestore({
-          //     lastName: "Test",
-          //     firstName: "Test",
-          //     avatar: "Test",
-          //     email: "Test",
-          //     id: "Test",
-          //     isVerified: true,
-          //   });
-          // }}
         >
           <Image
             source={{
@@ -143,8 +141,10 @@ const MessagesScreen = ({ navigation }) => {
           color="#5352ed"
         />
         <TextInput
-          placeholder="Search"
+          placeholder="Search by name..."
+          onChangeText={(val) => searchUser(val)}
           autoCapitalize="none"
+          value={search}
           style={[styles.input]}
           marginLeft={16}
         />
@@ -164,11 +164,11 @@ const MessagesScreen = ({ navigation }) => {
               backgroundColor: "transparent",
             }}
             numColumns={1}
-            data={DATA}
+            data={allUser}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity onPress={handleChatRoom}>
-                <MessageCardItem info={item} />
+                <MessageCardItem users={item} />
               </TouchableOpacity>
             )}
           />
