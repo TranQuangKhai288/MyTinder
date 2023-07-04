@@ -80,6 +80,7 @@ const LoginScreen = ({ navigation }) => {
           } else {
             navigation.navigate("SetUpProfile");
           }
+          // navigation.navigate("BottomTab");
           setIsLoading(false);
         } else {
           console.log("Login unsuccessful");

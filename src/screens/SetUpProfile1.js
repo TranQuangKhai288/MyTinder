@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   Text,
@@ -20,12 +20,17 @@ import { TextInput } from "react-native";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  userUpdateAvatar,
   userUpdateFirstName,
   userUpdateLastName,
 } from "../redux/actions/userActions";
+import { useFocusEffect } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
+import PopUpNotificationDialog from "./PopUpNotificationDialog";
 
 const SetUpProfile1 = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
+  console.log("user", user);
   const dispatch = useDispatch();
   const inset = useSafeAreaInsets();
   const [firstName, setFirstName] = useState("");
@@ -34,14 +39,46 @@ const SetUpProfile1 = ({ navigation }) => {
   const [isSetFirstName, setIsSetFirstName] = useState(true);
   const [isSetLastName, setIsSetLastName] = useState(true);
   const [enableNextButton, setEnableNextButton] = useState(true);
+  const [isShowPopUp, setIsShowPopUp] = useState(false);
+  const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [3, 4],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      dispatch(userUpdateAvatar(result.assets[0].uri));
+    }
+  };
+
+  const avatarButtononPressHandler = () => {
+    (async () => {
+      const galleryStatus =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+      setHasGalleryPermission(galleryStatus.status === "granted");
+    })();
+    if (hasGalleryPermission === false) {
+      setIsShowPopUp(true);
+    } else {
+      pickImage();
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      setEnableNextButton(true);
+    }, [])
+  );
   return (
     <View
       style={[
         {
-          paddingTop: inset.top + 40,
-          paddingBottom: inset.bottom + 40,
-          paddingLeft: inset.left + 40,
-          paddingRight: inset.right + 40,
+          paddingTop: inset.top + 20,
+          paddingBottom: inset.bottom + 20,
+          paddingLeft: inset.left + 20,
+          paddingRight: inset.right + 20,
         },
         styles.container,
       ]}
@@ -52,11 +89,18 @@ const SetUpProfile1 = ({ navigation }) => {
       <View style={styles.body_wrapper}>
         <View style={styles.avatar_wrapper}>
           <ImageBackground
-            source={require("../assets/images/avatar-default.png")}
+            source={
+              user.avatar
+                ? { uri: user.avatar }
+                : require("../assets/images/avatar-default.png")
+            }
             style={styles.avatar}
             borderRadius={60}
           >
-            <TouchableOpacity style={styles.choose_avatar_button}>
+            <TouchableOpacity
+              style={styles.choose_avatar_button}
+              onPress={avatarButtononPressHandler}
+            >
               <SvgXml xml={CameraIcon} height={24} width={24} />
             </TouchableOpacity>
           </ImageBackground>
@@ -145,6 +189,14 @@ const SetUpProfile1 = ({ navigation }) => {
           <Text style={styles.footer_button_text}>Confirm</Text>
         </TouchableOpacity>
       </View>
+      <PopUpNotificationDialog
+        visible={isShowPopUp}
+        onRequestClose={() => {
+          setIsShowPopUp(false);
+        }}
+        title={"Error"}
+        message={"No access to gallery"}
+      />
       <StatusBar style="dark" />
     </View>
   );
@@ -154,7 +206,7 @@ const styles = StyleSheet.create({
   container: {},
   header_wrapper: {
     justifyContent: "center",
-    alignItems: "left",
+    alignItems: "flex-start",
     marginTop: 40,
   },
   header_text: {
@@ -181,7 +233,7 @@ const styles = StyleSheet.create({
     padding: 8,
     borderWidth: 2,
     borderColor: "#fff",
-    borderRadius: "50%",
+    borderRadius: 22,
     bottom: 0,
     right: 0,
   },

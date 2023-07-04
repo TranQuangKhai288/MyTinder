@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -13,7 +13,15 @@ import { RedRightArrowIcon } from "../constants/icons";
 import { LIGHT_GRAY_COLOR, RED_COLOR } from "../constants/color";
 import { interests } from "../assets/data/data";
 import { useSelector, useDispatch } from "react-redux";
-import { userUpdateInterests } from "../redux/actions/userActions";
+import {
+  userUpdateInterests,
+  userUpdateAvatar,
+  userUpdateIsSetUp,
+} from "../redux/actions/userActions";
+import { useFocusEffect } from "@react-navigation/native";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { FIREBASE_STORAGE } from "../../firebaseConfig";
+import { updateUserDocumentToFirestore } from "../firebase/user";
 
 const SetUpProfile3 = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
@@ -24,15 +32,34 @@ const SetUpProfile3 = ({ navigation }) => {
   useEffect(() => {
     setSelectedInterestID(user.interests);
   }, []);
+  useFocusEffect(
+    useCallback(() => {
+      setEnableNextButton(true);
+    }, [])
+  );
   console.log(user);
+  const upLoadAvatar = async () => {
+    const storageRef = ref(FIREBASE_STORAGE, `users/${user.id}/avatar`);
+    try {
+      const fileData = await fetch(user.avatar);
+      const blob = await fileData.blob();
+      await uploadBytes(storageRef, blob);
+      console.log("upload success");
+      const downloadURL = await getDownloadURL(storageRef);
+      console.log(downloadURL);
+      dispatch(userUpdateAvatar(downloadURL));
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <View
       style={[
         {
-          paddingTop: inset.top + 40,
-          paddingBottom: inset.bottom + 40,
-          paddingLeft: inset.left + 40,
-          paddingRight: inset.right + 40,
+          paddingTop: inset.top + 20,
+          paddingBottom: inset.bottom + 20,
+          paddingLeft: inset.left + 20,
+          paddingRight: inset.right + 20,
         },
         styles.container,
       ]}
@@ -130,6 +157,9 @@ const SetUpProfile3 = ({ navigation }) => {
           onPress={() => {
             setEnableNextButton(false);
             dispatch(userUpdateInterests(selectedInterestID));
+            upLoadAvatar();
+            dispatch(userUpdateIsSetUp(true));
+            updateUserDocumentToFirestore(user);
             navigation.navigate("BottomTab");
           }}
         >
@@ -154,7 +184,7 @@ const styles = StyleSheet.create({
   },
   header_wrapper: {
     justifyContent: "center",
-    alignItems: "left",
+    alignItems: "flex-start",
     marginTop: 40,
   },
   header_text: {

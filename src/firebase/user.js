@@ -102,6 +102,7 @@ export const addUserToFirestore = async (user) => {
       gender: user.gender,
       email: user.email,
       avatar: user.avatar,
+      interests: user.interests,
       isVerified: user.isVerified,
       isSetUp: user.isSetUp,
       matches: [],
@@ -130,6 +131,7 @@ export const fetchUserData = async (user) => {
       user.gender = documentData.gender;
       user.email = documentData.email;
       user.avatar = documentData.avatar;
+      user.interests = documentData.interests;
       user.isVerified = documentData.isVerified;
       user.isSetUp = documentData.isSetUp;
       user.matches = documentData.matches;
@@ -172,6 +174,7 @@ export const updateUserDocumentToFirestore = async (user) => {
       gender: user.gender,
       email: user.email,
       avatar: user.avatar,
+      interests: user.interests,
       isVerified: user.isVerified,
       isSetUp: user.isSetUp,
       matches: user.matches,

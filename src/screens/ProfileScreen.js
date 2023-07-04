@@ -13,12 +13,18 @@ import { SvgXml } from "react-native-svg";
 import { WhiteGBIcon } from "../constants/icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { ScrollView } from "react-native-virtualized-view";
+import { useSelector } from "react-redux";
 
 const ProfileScreen = () => {
   const insets = useSafeAreaInsets();
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}></View>
+      <Image
+        source={{ uri: user.avatar.toString() }}
+        style={{ width: 300, height: 300 }}
+      />
     </View>
   );
 };

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -24,6 +24,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { userUpdateGender } from "../redux/actions/userActions";
 import { gender } from "../assets/data/data";
+import { useFocusEffect } from "@react-navigation/native";
 
 const SetUpProfile2 = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
@@ -38,14 +39,19 @@ const SetUpProfile2 = ({ navigation }) => {
       setSelectedGenderID(user.gender);
     }
   }, []);
+  useFocusEffect(
+    useCallback(() => {
+      setEnableNextButton(true);
+    }, [])
+  );
   return (
     <View
       style={[
         {
-          paddingTop: inset.top + 40,
-          paddingBottom: inset.bottom + 40,
-          paddingLeft: inset.left + 40,
-          paddingRight: inset.right + 40,
+          paddingTop: inset.top + 20,
+          paddingBottom: inset.bottom + 20,
+          paddingLeft: inset.left + 20,
+          paddingRight: inset.right + 20,
         },
         styles.container,
       ]}
@@ -120,7 +126,7 @@ const styles = StyleSheet.create({
   },
   header_wrapper: {
     justifyContent: "center",
-    alignItems: "left",
+    alignItems: "flex-start",
     marginTop: 40,
   },
   header_text: {
