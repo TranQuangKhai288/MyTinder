@@ -22,7 +22,7 @@ const ProfileScreen = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={{ uri: user.avatar.toString() }}
+        source={{ uri: user.avatar }}
         style={{ width: 300, height: 300 }}
       />
     </View>

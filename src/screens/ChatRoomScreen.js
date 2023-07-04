@@ -15,130 +15,143 @@ import {
 } from "react-native";
 
 import { StatusBar } from "expo-status-bar";
-import { TextInput } from "react-native-gesture-handler";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Icon, Avatar } from "react-native-elements";
 
 import { FlatList } from "react-native-gesture-handler";
-import firebase from "firebase/app";
+import color, { LIGHT_RED_COLOR, RED_COLOR } from "../constants/color";
 import { useSelector } from "react-redux";
 import {
   FIREBASE_APP,
   FIRESTORE_DB,
   FIREBASE_AUTH,
 } from "../../firebaseConfig";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
 import { doc, onSnapshot } from "firebase/firestore";
+import Messages from "../components/Messages";
 
 const DATA = [];
 
 const ChatRoomScreen = () => {
-  const [chat, setChat] = useState([]);
+  const insets = useSafeAreaInsets();
+  const [chats, setChats] = useState([]);
   const currentUser = useSelector((state) => state.user.user);
 
   useEffect(() => {
-    const unsub = onSnapshot(
-      doc(FIRESTORE_DB, "userChats", currentUser.id),
-      (doc) => {
-        setChat(doc.data());
-      }
-    );
-    return () => {
-      unsub();
+    const getChats = () => {
+      const unsub = onSnapshot(
+        doc(FIRESTORE_DB, "userChats", currentUser.id),
+        (doc) => {
+          setChats(doc.data());
+        }
+      );
+      return () => {
+        unsub();
+      };
     };
+
+    currentUser.id && getChats();
   }, [currentUser.id]);
+  console.log(chats);
 
   return (
-    <View style={styles.container}>
-      {/* header */}
-      <View
-        style={{
-          height: 90,
-          backgroundColor: "red",
-          elevation: 5,
-          alignItems: "center",
-          flexDirection: "row",
-        }}
-      >
+    <View
+      style={[
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        },
+        styles.container,
+      ]}
+    >
+      <View style={{ flex: 1 }}>
+        {/* header */}
         <View
           style={{
-            marginTop: 24,
-            marginLeft: 10,
-            flexDirection: "row",
+            height: 80,
+            backgroundColor: RED_COLOR,
+            paddingLeft: 12,
             alignItems: "center",
-            width: Dimensions.get("window").width,
-          }}
-        >
-          <Avatar
-            source={{
-              uri: "https://i.pinimg.com/736x/0b/22/97/0b2297a3c2d1006d93592c295cd4791b.jpg",
-            }}
-            rounded
-            size="small"
-          />
-          <Text style={{ color: "white", fontSize: 18, marginLeft: 8 }}>
-            Tran Quang Khai
-          </Text>
-        </View>
-      </View>
-
-      {/* body */}
-      <ImageBackground
-        source={require("../assets/images/backgr.jpg")}
-        style={{ flex: 1 }}
-      >
-        <FlatList
-          style={{ flex: 1 }}
-          data={DATA}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item, index) => index}
-          inverted
-          renderItem={({ item }) => {
-            return (
-              <MsgComponent sender={item.from == userData.id} item={item} />
-            );
-          }}
-        />
-
-        <View
-          style={{
-            backgroundColor: "green",
-            padding: 12,
             flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
           }}
         >
           <View
             style={{
-              borderWidth: 1,
-              borderRadius: 16,
-              height: 48,
+              flexDirection: "row",
+              alignItems: "center",
+              width: Dimensions.get("window").width,
+            }}
+          >
+            <Avatar
+              source={{
+                uri: "https://i.pinimg.com/736x/0b/22/97/0b2297a3c2d1006d93592c295cd4791b.jpg",
+              }}
+              rounded
+              size="medium"
+            />
+            <Text style={{ color: "white", fontSize: 22, marginLeft: 8 }}>
+              "Tran Quang Khai"
+            </Text>
+          </View>
+        </View>
+        {/* body */}
+        <View style={{ flex: 1, backgroundColor: LIGHT_RED_COLOR }}>
+          <ScrollView
+            style={{
+              height: Dimensions.get("window").height,
+            }}
+          >
+            <Messages />
+          </ScrollView>
+
+          <View
+            style={{
               backgroundColor: "white",
-              width: Dimensions.get("window").width - 70,
+              padding: 12,
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              padding: 10,
+              borderTopWidth: 0.7,
+              borderColor: "D6D6D6",
             }}
           >
-            <TextInput
-              placeholder="Search by name..."
-              autoCapitalize="none"
-              style={[styles.input]}
-              fontSize={16}
-            />
-          </View>
-          <TouchableOpacity>
-            <Icon
+            <View
               style={{
-                marginHorizontal: 15,
+                borderWidth: 1,
+                borderColor: "#CDCDCD",
+                borderRadius: 16,
+                height: 48,
+                backgroundColor: "#E6E6E6",
+                width: Dimensions.get("window").width - 70,
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: 10,
               }}
-              name="send"
-              type="Ionicons"
-            />
-          </TouchableOpacity>
+            >
+              <TextInput
+                placeholder="Say something..."
+                autoCapitalize="none"
+                style={[styles.input]}
+                fontSize={16}
+              />
+            </View>
+            <TouchableOpacity>
+              <Icon
+                style={{
+                  marginHorizontal: 15,
+                }}
+                name="send"
+                type="Ionicons"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-      </ImageBackground>
+      </View>
     </View>
   );
 };
@@ -146,6 +159,7 @@ const ChatRoomScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: RED_COLOR,
   },
 });
 
