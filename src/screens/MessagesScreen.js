@@ -8,6 +8,18 @@ import {
   Image,
   Dimensions,
 } from "react-native";
+
+import {
+  addDoc,
+  collection,
+  updateDoc,
+  doc,
+  getDoc,
+  setDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { FontAwesome5 } from "@expo/vector-icons";
@@ -46,10 +58,6 @@ const MessagesScreen = ({ navigation }) => {
   const [allUser, setallUser] = useState([]);
 
   const insets = useSafeAreaInsets();
-  const handleChatRoom = () => {
-    // Perform login logic here
-    navigation.navigate("ChatRoomScreen");
-  };
 
   const searchUser = (val) => {
     // setSearch(val);
@@ -58,6 +66,7 @@ const MessagesScreen = ({ navigation }) => {
     // );
     // setallUser(filteredList);
   };
+
   useEffect(() => {
     const fetchUserData = async () => {
       let users = await fetchAllUserData();
@@ -67,6 +76,47 @@ const MessagesScreen = ({ navigation }) => {
 
     fetchUserData();
   }, []);
+
+  const handleChatRoom = async (user) => {
+    //check wherther the group (chats in firestore) chat is exist or not
+    const combinedId =
+      currentUser.id > user.id
+        ? currentUser.id + user.id
+        : user.id + currentUser.id;
+
+    try {
+      const res = await getDoc(doc(FIRESTORE_DB, "chats", combinedId));
+      if (!res.exists()) {
+        //create a chat in chats collection
+        await setDoc(doc(FIRESTORE_DB, "chats", combinedId), {
+          messages: [],
+        });
+
+        //create user chats
+        await updateDoc(doc(FIRESTORE_DB, "userChats", currentUser.id), {
+          [combinedId + ".userInfo"]: {
+            id: user.id,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            avatar: user.avatar,
+          },
+        });
+
+        await updateDoc(doc(FIRESTORE_DB, "userChats", user.id), {
+          [combinedId + ".userInfo"]: {
+            id: currentUser.id,
+            firstName: currentUser.firstName,
+            lastName: currentUser.lastName,
+            avatar: currentUser.avatar,
+          },
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+    navigation.navigate("ChatRoomScreen");
+    //create user chats
+  };
 
   return (
     <View
@@ -167,7 +217,11 @@ const MessagesScreen = ({ navigation }) => {
             data={allUser}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={handleChatRoom}>
+              <TouchableOpacity
+                onPress={() => {
+                  handleChatRoom(item);
+                }}
+              >
                 <MessageCardItem users={item} />
               </TouchableOpacity>
             )}
