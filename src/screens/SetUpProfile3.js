@@ -21,7 +21,10 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { FIREBASE_STORAGE } from "../../firebaseConfig";
-import { updateUserDocumentToFirestore } from "../firebase/user";
+import {
+  updateUserDocumentToFirestore,
+  updateUserInterestsToFirestore,
+} from "../firebase/user";
 
 const SetUpProfile3 = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
@@ -154,12 +157,16 @@ const SetUpProfile3 = ({ navigation }) => {
         <TouchableOpacity
           style={styles.footer_button}
           disabled={!enableNextButton}
-          onPress={() => {
+          onPress={async () => {
             setEnableNextButton(false);
+            await upLoadAvatar();
+            let updatedUser = user;
+            updatedUser.interests = selectedInterestID;
+            updatedUser.isSetUp = true;
+            updatedUser.avatar = user.avatar;
             dispatch(userUpdateInterests(selectedInterestID));
-            upLoadAvatar();
             dispatch(userUpdateIsSetUp(true));
-            updateUserDocumentToFirestore(user);
+            await updateUserDocumentToFirestore(updatedUser);
             navigation.navigate("BottomTab");
           }}
         >
