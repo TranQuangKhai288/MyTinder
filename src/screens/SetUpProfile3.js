@@ -40,7 +40,6 @@ const SetUpProfile3 = ({ navigation }) => {
       setEnableNextButton(true);
     }, [])
   );
-  console.log(user);
   const upLoadAvatar = async () => {
     const storageRef = ref(FIREBASE_STORAGE, `users/${user.id}/avatar`);
     try {
@@ -49,8 +48,8 @@ const SetUpProfile3 = ({ navigation }) => {
       await uploadBytes(storageRef, blob);
       console.log("upload success");
       const downloadURL = await getDownloadURL(storageRef);
-      console.log(downloadURL);
-      dispatch(userUpdateAvatar(downloadURL));
+      dispatch(userUpdateAvatar(downloadURL.toString()));
+      return downloadURL.toString();
     } catch (error) {
       console.log(error);
     }
@@ -159,11 +158,11 @@ const SetUpProfile3 = ({ navigation }) => {
           disabled={!enableNextButton}
           onPress={async () => {
             setEnableNextButton(false);
-            await upLoadAvatar();
             let updatedUser = user;
             updatedUser.interests = selectedInterestID;
             updatedUser.isSetUp = true;
-            updatedUser.avatar = user.avatar;
+            updatedUser.avatar = await upLoadAvatar();
+            console.log(updatedUser);
             dispatch(userUpdateInterests(selectedInterestID));
             dispatch(userUpdateIsSetUp(true));
             await updateUserDocumentToFirestore(updatedUser);
