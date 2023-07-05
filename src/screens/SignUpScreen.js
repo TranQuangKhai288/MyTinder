@@ -11,10 +11,11 @@ import {
   Modal,
   Pressable,
 } from "react-native";
+import { doc, setDoc } from "firebase/firestore";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useFonts } from "expo-font";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_AUTH } from "../../firebaseConfig";
+import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
 import { RED_COLOR } from "../constants/color";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -66,6 +67,9 @@ const SignUpScreen = ({ navigation }) => {
           navigation.navigate("LoginScreen");
         }
         setIsLoading(false);
+
+        //create empty user chats on firestore
+        await setDoc(doc(FIRESTORE_DB, "userChats", user.id), {});
       } catch (error) {
         console.log("Error register user: ", error);
         setIsLoading(false);

@@ -9,6 +9,7 @@ import {
   SafeAreaView,
   Animated,
 } from "react-native";
+import color, { RED_COLOR } from "../constants/color";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import MatchesScreen from "../screens/MatchesScreen";
@@ -99,7 +100,7 @@ const TabButton = (props) => {
           <Icon
             type={item.type}
             name={item.icon}
-            color={focused ? "#fff" : "#FF22E0"}
+            color={focused ? "#fff" : RED_COLOR}
           />
         </View>
         <Animatable.Text ref={textRef} style={styles.text}>
@@ -160,13 +161,13 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#FF22E0",
+    backgroundColor: RED_COLOR,
     borderRadius: 25,
   },
   text: {
     fontSize: 10,
     textAlign: "center",
-    color: "#FF22E0",
+    color: RED_COLOR,
   },
 });
 

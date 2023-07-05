@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import {
-  View,
   Text,
-  TouchableOpacity,
-  FlatList,
+  View,
   StyleSheet,
-  Dimensions,
+  ScrollView,
   ImageBackground,
+  TouchableOpacity,
   Image,
+  Dimensions,
 } from "react-native";
 import { SvgXml } from "react-native-svg";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,7 +18,7 @@ import { LIGHT_GRAY_COLOR, RED_COLOR } from "../constants/color";
 import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
 import { ref, set, push, onValue } from "@firebase/database";
 
-const ProfileScreen = () => {
+const ProfileScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const user = useSelector((state) => state.user.user);
   const [messageDetail, setMessageDetail] = useState("");
@@ -96,14 +96,7 @@ const ProfileScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  wrapper: {
-    flexDirection: "column",
-    justifyContent: "center",
-    backgroundColor: "black",
-  },
+  container: { flex: 1 },
 });
 
 export default ProfileScreen;

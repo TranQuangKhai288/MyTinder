@@ -11,6 +11,7 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import CardItem from "../components/CardItem";
+import { useSelector } from "react-redux";
 import { ScrollView } from "react-native-virtualized-view";
 import { useSelector } from "react-redux";
 
@@ -127,8 +128,8 @@ const DATA = [
 ];
 
 const MatchesScreen = ({ navigation }) => {
+  const currentUser = useSelector((state) => state.user.user);
   const insets = useSafeAreaInsets();
-  const user = useSelector((state) => state.user.user);
   const handleMatchesinfo = () => {
     // Perform login logic here
     navigation.navigate("OtherProfileScreen");
@@ -172,7 +173,7 @@ const MatchesScreen = ({ navigation }) => {
         >
           <Image
             source={{
-              uri: user.avatar,
+              uri: currentUser.avatar,
             }}
             style={{
               height: 40,
