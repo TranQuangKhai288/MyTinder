@@ -21,10 +21,12 @@ import {
   updateUserVerifyToFirestore,
   loginUser,
   logoutUser,
+  fetchAllUserData,
 } from "../firebase/user";
 import { useFocusEffect } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import PopUpNotificationDialog from "./PopUpNotificationDialog";
+import { allUserFetch } from "../redux/actions/allUserActions";
 
 const LoginScreen = ({ navigation }) => {
   console.log("LoginScreen");
@@ -72,9 +74,12 @@ const LoginScreen = ({ navigation }) => {
         if (user.isVerified) {
           await updateUserVerifyToFirestore(user);
           await fetchUserData(user);
+
           console.log("Login successful");
           dispatch(userUpdateState(user));
           dispatch(userLogin());
+          let users = await fetchAllUserData();
+          dispatch(allUserFetch(users.filter((u) => u.id !== user.id)));
           if (userState.isSetUp) {
             navigation.navigate("BottomTab");
           } else {

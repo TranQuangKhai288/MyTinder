@@ -7,6 +7,7 @@ import {
   Image,
   ImageBackground,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
@@ -23,6 +24,8 @@ import {
   userUpdateAvatar,
   userUpdateFirstName,
   userUpdateLastName,
+  userUpdateOccupation,
+  userUpdateAboutMe,
 } from "../redux/actions/userActions";
 import { useFocusEffect } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
@@ -36,6 +39,8 @@ const SetUpProfile1 = ({ navigation }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [birthday, setBirthday] = useState("");
+  const [occupation, setOccupation] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
   const [isSetFirstName, setIsSetFirstName] = useState(true);
   const [isSetLastName, setIsSetLastName] = useState(true);
   const [enableNextButton, setEnableNextButton] = useState(true);
@@ -83,121 +88,167 @@ const SetUpProfile1 = ({ navigation }) => {
         styles.container,
       ]}
     >
-      <View style={styles.header_wrapper}>
-        <Text style={styles.header_text}>Your profile</Text>
-      </View>
-      <View style={styles.body_wrapper}>
-        <View style={styles.avatar_wrapper}>
-          <ImageBackground
-            source={
-              user.avatar
-                ? { uri: user.avatar }
-                : require("../assets/images/avatar-default.png")
-            }
-            style={styles.avatar}
-            borderRadius={60}
-          >
-            <TouchableOpacity
-              style={styles.choose_avatar_button}
-              onPress={avatarButtononPressHandler}
+      <ScrollView
+        style={{}}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
+        <View style={styles.header_wrapper}>
+          <Text style={styles.header_text}>Your profile</Text>
+        </View>
+        <View style={styles.body_wrapper}>
+          <View style={styles.avatar_wrapper}>
+            <ImageBackground
+              source={
+                user.avatar
+                  ? { uri: user.avatar }
+                  : require("../assets/images/avatar-default.png")
+              }
+              style={styles.avatar}
+              borderRadius={60}
             >
-              <SvgXml xml={CameraIcon} height={24} width={24} />
-            </TouchableOpacity>
-          </ImageBackground>
-        </View>
-        <View style={styles.name_wrapper}>
-          <View style={styles.name_header_wrapper}>
-            <Text style={styles.name_header_text}>First name</Text>
+              <TouchableOpacity
+                style={styles.choose_avatar_button}
+                onPress={avatarButtononPressHandler}
+              >
+                <SvgXml xml={CameraIcon} height={24} width={24} />
+              </TouchableOpacity>
+            </ImageBackground>
           </View>
-          <View style={styles.name_input_wrapper}>
-            <TextInput
-              style={[
-                styles.name_input,
-                isSetFirstName
-                  ? { borderColor: LIGHT_GRAY_COLOR }
-                  : { borderColor: "red" },
-              ]}
-              onChangeText={(text) => {
-                setFirstName(text);
-              }}
-              onFocus={() => {
-                setIsSetFirstName(true);
-              }}
-            />
-          </View>
-          {isSetFirstName ? null : (
-            <View style={styles.name_error_wrapper}>
-              <Text style={styles.name_error_text}>
-                * You must enter you first name
-              </Text>
+          <View style={styles.name_wrapper}>
+            <View style={styles.name_header_wrapper}>
+              <Text style={styles.name_header_text}>First name</Text>
             </View>
-          )}
-        </View>
-        <View style={styles.name_wrapper}>
-          <View style={styles.name_header_wrapper}>
-            <Text style={styles.name_header_text}>Last name</Text>
-          </View>
-          <View style={styles.name_input_wrapper}>
-            <TextInput
-              style={[
-                styles.name_input,
-                isSetLastName
-                  ? { borderColor: LIGHT_GRAY_COLOR }
-                  : { borderColor: "red" },
-              ]}
-              onChangeText={(text) => {
-                setLastName(text);
-              }}
-              onFocus={() => {
-                setIsSetLastName(true);
-              }}
-            />
-          </View>
-          {isSetLastName ? null : (
-            <View style={styles.name_error_wrapper}>
-              <Text style={styles.name_error_text}>
-                * You must enter you last name
-              </Text>
+            <View style={styles.name_input_wrapper}>
+              <TextInput
+                style={[
+                  styles.name_input,
+                  isSetFirstName
+                    ? { borderColor: LIGHT_GRAY_COLOR }
+                    : { borderColor: "red" },
+                ]}
+                onChangeText={(text) => {
+                  setFirstName(text);
+                }}
+                onFocus={() => {
+                  setIsSetFirstName(true);
+                }}
+              />
             </View>
-          )}
+            {isSetFirstName ? null : (
+              <View style={styles.name_error_wrapper}>
+                <Text style={styles.name_error_text}>
+                  * You must enter you first name
+                </Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.name_wrapper}>
+            <View style={styles.name_header_wrapper}>
+              <Text style={styles.name_header_text}>Last name</Text>
+            </View>
+            <View style={styles.name_input_wrapper}>
+              <TextInput
+                style={[
+                  styles.name_input,
+                  isSetLastName
+                    ? { borderColor: LIGHT_GRAY_COLOR }
+                    : { borderColor: "red" },
+                ]}
+                onChangeText={(text) => {
+                  setLastName(text);
+                }}
+                onFocus={() => {
+                  setIsSetLastName(true);
+                }}
+              />
+            </View>
+            {isSetLastName ? null : (
+              <View style={styles.name_error_wrapper}>
+                <Text style={styles.name_error_text}>
+                  * You must enter you last name
+                </Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.name_wrapper}>
+            <View style={styles.name_header_wrapper}>
+              <Text style={styles.name_header_text}>Job</Text>
+            </View>
+            <View style={styles.name_input_wrapper}>
+              <TextInput
+                style={[styles.name_input, { borderColor: LIGHT_GRAY_COLOR }]}
+                onChangeText={(text) => {
+                  setOccupation(text);
+                }}
+              />
+            </View>
+          </View>
+          <View style={styles.name_wrapper}>
+            <View style={styles.name_header_wrapper}>
+              <Text style={styles.name_header_text}>About me</Text>
+            </View>
+            <View style={styles.name_input_wrapper}>
+              <TextInput
+                style={[
+                  {
+                    borderColor: LIGHT_GRAY_COLOR,
+                    borderWidth: 1,
+                    paddingVertical: 8,
+                    borderRadius: 12,
+                    paddingHorizontal: 12,
+                    fontSize: 16,
+                    fontFamily: "LatoRegular",
+                  },
+                ]}
+                onChangeText={(text) => {
+                  setAboutMe(text);
+                }}
+                multiline={true}
+              />
+            </View>
+          </View>
+          <View style={styles.choose_birthday_wrapper}>
+            <Text style={{ fontSize: 18, fontFamily: "SourceSansProRegular" }}>
+              Choose Birthday
+            </Text>
+          </View>
         </View>
-        <View style={styles.choose_birthday_wrapper}>
-          <Text style={{ fontSize: 18, fontFamily: "SourceSansProRegular" }}>
-            Choose Birthday
-          </Text>
+
+        <View style={styles.footer_wrapper}>
+          <TouchableOpacity
+            disabled={!enableNextButton}
+            style={styles.footer_button}
+            onPress={() => {
+              if (firstName.length === 0) {
+                setIsSetFirstName(false);
+              }
+              if (lastName.length === 0) {
+                setIsSetLastName(false);
+              }
+              if (firstName !== "" && lastName !== "") {
+                setEnableNextButton(false);
+                dispatch(userUpdateFirstName(firstName));
+                dispatch(userUpdateLastName(lastName));
+                dispatch(userUpdateOccupation(occupation));
+                dispatch(userUpdateAboutMe(aboutMe));
+                navigation.navigate("SetUpProfile2");
+              }
+            }}
+          >
+            <Text style={styles.footer_button_text}>Confirm</Text>
+          </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.footer_wrapper}>
-        <TouchableOpacity
-          disabled={!enableNextButton}
-          style={styles.footer_button}
-          onPress={() => {
-            if (firstName.length === 0) {
-              setIsSetFirstName(false);
-            }
-            if (lastName.length === 0) {
-              setIsSetLastName(false);
-            }
-            if (firstName !== "" && lastName !== "") {
-              setEnableNextButton(false);
-              dispatch(userUpdateFirstName(firstName));
-              dispatch(userUpdateLastName(lastName));
-              navigation.navigate("SetUpProfile2");
-            }
+        <PopUpNotificationDialog
+          visible={isShowPopUp}
+          onRequestClose={() => {
+            setIsShowPopUp(false);
           }}
-        >
-          <Text style={styles.footer_button_text}>Confirm</Text>
-        </TouchableOpacity>
-      </View>
-      <PopUpNotificationDialog
-        visible={isShowPopUp}
-        onRequestClose={() => {
-          setIsShowPopUp(false);
-        }}
-        title={"Error"}
-        message={"No access to gallery"}
-      />
-      <StatusBar style="dark" />
+          title={"Error"}
+          message={"No access to gallery"}
+        />
+        <StatusBar style="dark" />
+      </ScrollView>
     </View>
   );
 };
@@ -243,9 +294,9 @@ const styles = StyleSheet.create({
   name_input_wrapper: {},
   name_input: {
     borderWidth: 1,
-    paddingVertical: 16,
+    paddingVertical: 8,
     borderRadius: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     fontSize: 16,
     fontFamily: "LatoRegular",
   },

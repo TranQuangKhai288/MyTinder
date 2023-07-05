@@ -33,7 +33,6 @@ export default function App() {
       </View> */}
         <NavigationContainer>
           <Stack />
-          {/* <SetUpProfile2 /> */}
         </NavigationContainer>
       </Provider>
     </SafeAreaProvider>

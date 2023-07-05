@@ -16,7 +16,7 @@ const StartScreen = ({ navigation }) => {
       </View>
       <View style={styles.content_wrapper}>
         <View style={styles.header_wrapper}>
-          <Text style={styles.header}>Matches</Text>
+          <Text style={styles.header}>MyTinder</Text>
         </View>
         <View style={styles.description_wrapper}>
           <Text style={styles.description}>

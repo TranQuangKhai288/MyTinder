@@ -162,7 +162,7 @@ const SetUpProfile3 = ({ navigation }) => {
             updatedUser.interests = selectedInterestID;
             updatedUser.isSetUp = true;
             updatedUser.avatar = await upLoadAvatar();
-            console.log(updatedUser);
+            console.log("updatedUser", updatedUser);
             dispatch(userUpdateInterests(selectedInterestID));
             dispatch(userUpdateIsSetUp(true));
             await updateUserDocumentToFirestore(updatedUser);

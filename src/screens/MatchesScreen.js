@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import CardItem from "../components/CardItem";
 import { ScrollView } from "react-native-virtualized-view";
+import { useSelector } from "react-redux";
 
 const DATA = [
   {
@@ -127,6 +128,7 @@ const DATA = [
 
 const MatchesScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
+  const user = useSelector((state) => state.user.user);
   const handleMatchesinfo = () => {
     // Perform login logic here
     navigation.navigate("OtherProfileScreen");
@@ -170,7 +172,7 @@ const MatchesScreen = ({ navigation }) => {
         >
           <Image
             source={{
-              uri: "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
+              uri: user.avatar,
             }}
             style={{
               height: 40,

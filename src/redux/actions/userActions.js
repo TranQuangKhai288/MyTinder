@@ -5,6 +5,8 @@ export const USER_UPDATE_EMAIL = "USER_UPDATE_EMAIL";
 export const USER_UPDATE_AVATAR = "USER_UPDATE_AVATAR";
 export const USER_UPDATE_FIRST_NAME = "USER_UPDATE_FIRST_NAME";
 export const USER_UPDATE_LAST_NAME = "USER_UPDATE_LAST_NAME";
+export const USER_UPDATE_OCCUPATION = "USER_UPDATE_OCCUPATION";
+export const USER_UPDATE_ABOUT_ME = "USER_UPDATE_ABOUT_ME";
 export const USER_UPDATE_BIRTHDAY = "USER_UPDATE_BIRTHDAY";
 export const USER_UPDATE_GENDER = "USER_UPDATE_GENDER";
 export const USER_UPDATE_INTERESTS = "USER_UPDATE_INTERESTS";
@@ -42,6 +44,16 @@ export const userUpdateFirstName = (firstName) => ({
 export const userUpdateLastName = (lastName) => ({
   type: USER_UPDATE_LAST_NAME,
   payload: lastName,
+});
+
+export const userUpdateOccupation = (occupation) => ({
+  type: USER_UPDATE_OCCUPATION,
+  payload: occupation,
+});
+
+export const userUpdateAboutMe = (aboutMe) => ({
+  type: USER_UPDATE_ABOUT_ME,
+  payload: aboutMe,
 });
 
 export const userUpdateBirthday = (birthday) => ({

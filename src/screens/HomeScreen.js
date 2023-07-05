@@ -8,6 +8,7 @@ import { Entypo } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/FontAwesome"; // Replace with the appropriate icon library import
 import { LinearGradient } from "expo-linear-gradient";
+import { useSelector } from "react-redux";
 
 const DEMO_DATA = [
   {
@@ -119,6 +120,8 @@ const HomeScreen = ({ navigation }) => {
   }, []);
 
   const insets = useSafeAreaInsets();
+  const allUsers = useSelector((state) => state.allUser.allUser);
+  console.log("all users:", allUsers);
 
   const [fontsLoaded] = useFonts({
     Billabong: require("../assets/fonts/Billabong.ttf"),
@@ -193,7 +196,7 @@ const HomeScreen = ({ navigation }) => {
       {/* Swipe card */}
       <View style={styles.swiper_wrapper}>
         <Swiper
-          cards={DEMO_DATA}
+          cards={allUsers}
           onSwipedLeft={() => {
             console.log("Swipe NOPE");
           }}
@@ -206,7 +209,7 @@ const HomeScreen = ({ navigation }) => {
                 <Text
                   style={{
                     color: "red",
-                    fontFamily: "SourceSansProBold",
+                    fontFamily: "LatoBlack",
                     fontSize: 32,
                   }}
                 >
@@ -228,7 +231,7 @@ const HomeScreen = ({ navigation }) => {
                 <Text
                   style={{
                     color: "#00FF00",
-                    fontFamily: "SourceSansProBold",
+                    fontFamily: "LatoBlack",
                     fontSize: 32,
                   }}
                 >
@@ -254,7 +257,7 @@ const HomeScreen = ({ navigation }) => {
           }}
           renderCard={(card) => (
             <View key={card.id} style={styles.card}>
-              <Image style={styles.Image} source={{ uri: card.imageURL }} />
+              <Image style={styles.Image} source={{ uri: card.avatar }} />
               <View style={styles.content}>
                 <LinearGradient
                   colors={["transparent", "#000000"]}
@@ -265,7 +268,9 @@ const HomeScreen = ({ navigation }) => {
                       <Text style={styles.textName}>
                         {card.firstName} {card.lastName}
                       </Text>
-                      <Text style={styles.textAge}>{card.age}</Text>
+                      <Text style={styles.textAge}>
+                        {!card.birthday ? "20" : card.birthday}
+                      </Text>
                     </View>
                     <Text style={styles.text}>{card.occupation}</Text>
                   </View>

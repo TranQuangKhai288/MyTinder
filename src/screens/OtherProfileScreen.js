@@ -14,10 +14,13 @@ import { SCREEN_WIDTH } from "../constants/constants";
 import { SvgXml } from "react-native-svg";
 import { CloseIcon, HeartIcon, RightArrowIcon } from "../constants/icons";
 import { RED_COLOR } from "../constants/color";
+import { useSelector } from "react-redux";
+import { gender, interests } from "../assets/data/data";
 
 const OtherProfileScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
-  const interests = ["Travel", "Music", "Sport", "Reading", "Cooking"];
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
   const gallery = [
     require("../assets/images/test-gallery1.png"),
     require("../assets/images/test-gallery2.png"),
@@ -50,10 +53,7 @@ const OtherProfileScreen = ({ navigation }) => {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.avatar_wrapper}>
-          <Image
-            source={require("../assets/images/testAvatar.png")}
-            style={styles.avatar}
-          />
+          <Image source={{ uri: user.avatar }} style={styles.avatar} />
         </View>
         <TouchableOpacity
           style={styles.close_button_wrapper}
@@ -72,28 +72,36 @@ const OtherProfileScreen = ({ navigation }) => {
           </View>
           <View style={styles.name_job_wrapper}>
             <View style={styles.name_wrapper}>
-              <Text style={styles.name_text}>Name, age</Text>
+              <Text style={styles.name_text}>
+                {`${user.firstName} ${user.lastName}`},{" "}
+                {!user.birthday ? 20 : user.birthday}
+              </Text>
+              <View>
+                {user.gender === 1 || user.gender === 2 ? (
+                  user.gender === 1 ? (
+                    <Image
+                      source={require("../assets/images/female-gender.png")}
+                      style={styles.gender_icon}
+                    />
+                  ) : (
+                    <Image
+                      source={require("../assets/images/male-gender.png")}
+                      style={styles.gender_icon}
+                    />
+                  )
+                ) : null}
+              </View>
             </View>
             <View style={styles.job_wrapper}>
-              <Text style={styles.job_text}>Job</Text>
-            </View>
-          </View>
-          <View style={styles.location_wrapper}>
-            <View style={styles.location_header_wrapper}>
-              <Text style={styles.location_header_text}>Location</Text>
-            </View>
-            <View style={styles.location_content_wrapper}>
-              <Text style={styles.location_content_text}>
-                Location description
-              </Text>
+              <Text style={styles.job_text}>{user.occupation}</Text>
             </View>
           </View>
           <View style={styles.about_wrapper}>
             <View style={styles.about_header_wrapper}>
-              <Text style={styles.about_header_text}>About</Text>
+              <Text style={styles.about_header_text}>About me</Text>
             </View>
             <View style={styles.about_content_wrapper}>
-              <Text style={styles.about_content_text}>About description</Text>
+              <Text style={styles.about_content_text}>{user.aboutMe}</Text>
             </View>
           </View>
           <View style={styles.interest_wrapper}>
@@ -101,9 +109,16 @@ const OtherProfileScreen = ({ navigation }) => {
               <Text style={styles.interest_header_text}>Interest</Text>
             </View>
             <View style={styles.interest_content_wrapper}>
-              {interests.map((item, index) => (
+              {user.interests.map((item, index) => (
                 <View key={index} style={styles.interest_item_wrapper}>
-                  <Text style={styles.interest_item_text}>{item}</Text>
+                  <SvgXml
+                    xml={interests.find((i) => i.id === item).icon}
+                    height={20}
+                    width={20}
+                  />
+                  <Text style={styles.interest_item_text}>
+                    {interests.find((i) => i.id === item).name}
+                  </Text>
                 </View>
               ))}
             </View>
@@ -118,8 +133,8 @@ const OtherProfileScreen = ({ navigation }) => {
                   <View key={index} style={styles.gallery_item_wrapper}>
                     <Image
                       style={{
-                        width: 96,
-                        height: (96 * 4) / 3,
+                        width: 100,
+                        height: (100 * 4) / 3,
                         borderRadius: 8,
                       }}
                       source={item}
@@ -137,7 +152,7 @@ const OtherProfileScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: "#FFFFFF" },
   wrapper: { flex: 1 },
   avatar_wrapper: { width: SCREEN_WIDTH },
   avatar: {
@@ -165,7 +180,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
     padding: 28,
-    marginTop: -60,
+    marginTop: -40,
   },
   function_button_wrapper: {
     flexDirection: "row",
@@ -191,49 +206,41 @@ const styles = StyleSheet.create({
     backgroundColor: RED_COLOR,
   },
   name_job_wrapper: { marginTop: 40 },
-  name_wrapper: {},
+  name_wrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
   name_text: {
-    fontFamily: "SourceSansProBold",
-    fontSize: 28,
+    fontFamily: "LatoBlack",
+    fontSize: 30,
     color: "#000000",
   },
+  gender_icon: { width: 28, height: 28, marginLeft: 12 },
   job_wrapper: { marginTop: 4 },
   job_text: {
-    fontFamily: "SourceSansProRegular",
-    fontSize: 16,
-    color: "#000000",
-  },
-  location_wrapper: { marginTop: 40 },
-  location_header_wrapper: {},
-  location_header_text: {
-    fontFamily: "SourceSansProBold",
-    fontSize: 20,
-    color: "#000000",
-  },
-  location_content_wrapper: { marginTop: 4 },
-  location_content_text: {
-    fontFamily: "SourceSansProRegular",
-    fontSize: 16,
+    fontFamily: "LatoRegular",
+    fontSize: 18,
     color: "#000000",
   },
   about_wrapper: { marginTop: 40 },
   about_header_wrapper: {},
   about_header_text: {
-    fontFamily: "SourceSansProBold",
-    fontSize: 20,
+    fontFamily: "LatoBlack",
+    fontSize: 22,
     color: "#000000",
   },
   about_content_wrapper: { marginTop: 4 },
   about_content_text: {
-    fontFamily: "SourceSansProRegular",
-    fontSize: 16,
+    fontFamily: "LatoRegular",
+    fontSize: 18,
     color: "#000000",
   },
   interest_wrapper: { marginTop: 40 },
   interest_header_wrapper: {},
   interest_header_text: {
-    fontFamily: "SourceSansProBold",
-    fontSize: 20,
+    fontFamily: "LatoBlack",
+    fontSize: 22,
     color: "#000000",
   },
   interest_content_wrapper: {
@@ -245,21 +252,25 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: "#000000",
+    borderColor: RED_COLOR,
     borderRadius: 8,
     marginRight: 4,
     marginBottom: 4,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
   },
   interest_item_text: {
-    fontFamily: "SourceSansProRegular",
-    fontSize: 16,
+    fontFamily: "LatoRegular",
+    fontSize: 18,
     color: "#000000",
+    marginLeft: 4,
   },
   gallery_wrapper: { marginTop: 40 },
   gallery_header_wrapper: {},
   gallery_header_text: {
-    fontFamily: "SourceSansProBold",
-    fontSize: 20,
+    fontFamily: "LatoBlack",
+    fontSize: 22,
     color: "#000000",
   },
   gallery_content_wrapper: {

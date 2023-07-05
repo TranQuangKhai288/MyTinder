@@ -6,12 +6,13 @@ import {
   USER_UPDATE_AVATAR,
   USER_UPDATE_FIRST_NAME,
   USER_UPDATE_LAST_NAME,
+  USER_UPDATE_OCCUPATION,
+  USER_UPDATE_ABOUT_ME,
   USER_UPDATE_BIRTHDAY,
   USER_UPDATE_GENDER,
   USER_UPDATE_INTERESTS,
   USER_UPDATE_IS_VERIFIED,
   USER_UPDATE_IS_SET_UP,
-  updateGender,
 } from "../actions/userActions";
 
 const userInitialState = {
@@ -22,6 +23,9 @@ const userInitialState = {
     birthday: null,
     gender: null,
     interests: [],
+    occupation: null,
+    aboutMe: null,
+    gallery: [],
     email: null,
     avatar: null,
     isVerified: false,
@@ -84,6 +88,22 @@ const userReducer = (state = userInitialState, action) => {
         user: {
           ...state.user,
           lastName: action.payload,
+        },
+      };
+    case USER_UPDATE_OCCUPATION:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          occupation: action.payload,
+        },
+      };
+    case USER_UPDATE_ABOUT_ME:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          aboutMe: action.payload,
         },
       };
     case USER_UPDATE_BIRTHDAY:
