@@ -22,7 +22,7 @@ const Message = () => {
         style={{
           marginLeft: 8,
           backgroundColor: "white",
-          padding: 10,
+          padding: 12,
           borderTopRightRadius: 20,
           borderBottomRightRadius: 20,
           borderBottomLeftRadius: 20,
@@ -30,7 +30,8 @@ const Message = () => {
       >
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 16,
+            fontFamily: "LatoRegular",
           }}
         >
           Message

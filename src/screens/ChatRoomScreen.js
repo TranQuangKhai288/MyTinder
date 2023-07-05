@@ -13,7 +13,7 @@ import {
   ImageBackground,
   Dimensions,
 } from "react-native";
-
+import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
@@ -28,13 +28,13 @@ import {
   FIREBASE_AUTH,
 } from "../../firebaseConfig";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-
+import { Image } from "react-native-elements";
 import { doc, onSnapshot } from "firebase/firestore";
 import Messages from "../components/Messages";
 
 const DATA = [];
 
-const ChatRoomScreen = () => {
+const ChatRoomScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const [chats, setChats] = useState([]);
   const currentUser = useSelector((state) => state.user.user);
@@ -72,7 +72,7 @@ const ChatRoomScreen = () => {
         {/* header */}
         <View
           style={{
-            height: 80,
+            height: 50,
             backgroundColor: RED_COLOR,
             paddingLeft: 12,
             alignItems: "center",
@@ -86,14 +86,33 @@ const ChatRoomScreen = () => {
               width: Dimensions.get("window").width,
             }}
           >
-            <Avatar
+            <Icon
+              name="arrow-back"
+              type="ionicon"
+              color="white"
+              size={24}
+              onPress={() => navigation.goBack()}
+            />
+
+            <Image
               source={{
                 uri: "https://i.pinimg.com/736x/0b/22/97/0b2297a3c2d1006d93592c295cd4791b.jpg",
               }}
-              rounded
-              size="medium"
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+                marginLeft: 8,
+              }}
             />
-            <Text style={{ color: "white", fontSize: 22, marginLeft: 8 }}>
+            <Text
+              style={{
+                color: "white",
+                fontSize: 18,
+                marginLeft: 8,
+                fontFamily: "LatoBold",
+              }}
+            >
               "Tran Quang Khai"
             </Text>
           </View>
@@ -110,7 +129,7 @@ const ChatRoomScreen = () => {
 
           <View
             style={{
-              backgroundColor: "white",
+              backgroundColor: RED_COLOR,
               padding: 12,
               flexDirection: "row",
               alignItems: "center",

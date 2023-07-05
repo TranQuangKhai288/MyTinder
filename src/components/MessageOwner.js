@@ -24,12 +24,13 @@ const Message = () => {
           borderTopLeftRadius: 20,
           borderBottomRightRadius: 20,
           borderBottomLeftRadius: 20,
-          padding: 10,
+          padding: 12,
         }}
       >
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 16,
+            fontFamily: "LatoRegular",
           }}
         >
           My Message
