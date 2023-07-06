@@ -51,6 +51,7 @@ const ChatRoomScreen = ({ navigation, route }) => {
   const [chatting, setChatting] = useState(false);
   const [message, setMessage] = useState("");
   const scrollViewRef = useRef();
+  const [userStatus, setUserStatus] = useState("");
   const sendMessage = async (message, user) => {
     if (message !== "") {
       const messageRef = ref(FIREBASE_REALTIME_DB, "chats/" + chatID);
@@ -67,11 +68,11 @@ const ChatRoomScreen = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    const messageRef = ref(FIREBASE_REALTIME_DB);
+    const messageRef = ref(FIREBASE_REALTIME_DB, "chats/" + chatID);
     const handleNewMessage = (snapshot) => {
       const message = snapshot.val();
-      if (message && message.chats && message.chats[chatID]) {
-        const messageArray = Object.values(message.chats[chatID]).map(
+      if (message) {
+        const messageArray = Object.values(message).map(
           ({ key, message, sender, time }) => ({ key, message, sender, time })
         );
         setChats(messageArray);
@@ -79,6 +80,21 @@ const ChatRoomScreen = ({ navigation, route }) => {
       }
     };
     const subcrition = onValue(messageRef, handleNewMessage);
+
+    return () => {
+      subcrition();
+    };
+  }, []);
+
+  useEffect(() => {
+    const statusRef = ref(FIREBASE_REALTIME_DB, "status/" + user.id);
+    const handleNewStatus = (snapshot) => {
+      const statusData = snapshot.val();
+      if (statusData) {
+        setUserStatus(statusData.status);
+      }
+    };
+    const subcrition = onValue(statusRef, handleNewStatus);
 
     return () => {
       subcrition();
@@ -142,18 +158,23 @@ const ChatRoomScreen = ({ navigation, route }) => {
                 }}
               />
               <View
-                style={{
-                  height: 14,
-                  width: 14,
-                  backgroundColor: "green",
-                  borderRadius: 7,
-                  marginRight: 2,
-                  position: "absolute",
-                  bottom: 0,
-                  right: 0,
-                  borderWidth: 2,
-                  borderColor: "#FFF",
-                }}
+                style={[
+                  {
+                    height: 14,
+                    width: 14,
+
+                    borderRadius: 7,
+                    marginRight: 2,
+                    position: "absolute",
+                    bottom: 0,
+                    right: 0,
+                    borderWidth: 2,
+                    borderColor: "#FFF",
+                  },
+                  userStatus === "online"
+                    ? { backgroundColor: "green" }
+                    : { backgroundColor: "grey" },
+                ]}
               ></View>
             </View>
             <View
@@ -189,7 +210,7 @@ const ChatRoomScreen = ({ navigation, route }) => {
                       color: "#777777",
                     }}
                   >
-                    Online
+                    {userStatus === "online" ? "Online" : "Offline"}
                   </Text>
                 </View>
               </View>

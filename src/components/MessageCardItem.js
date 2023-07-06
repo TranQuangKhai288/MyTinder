@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Text,
@@ -10,8 +10,27 @@ import {
   StyleSheet,
 } from "react-native";
 import { BlurView } from "expo-blur";
+import { ref, onValue } from "firebase/database";
+import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
 
 const MessageCardItem = ({ users }) => {
+  const [userStatus, setUserStatus] = useState("");
+
+  useEffect(() => {
+    const statusRef = ref(FIREBASE_REALTIME_DB, "status/" + users.id);
+    const handleNewStatus = (snapshot) => {
+      const statusData = snapshot.val();
+      if (statusData) {
+        setUserStatus(statusData.status);
+      }
+    };
+    const subcrition = onValue(statusRef, handleNewStatus);
+
+    return () => {
+      subcrition();
+    };
+  }, []);
+
   return (
     <View style={styles.containerCardItem}>
       <View style={styles.card}>
@@ -23,17 +42,21 @@ const MessageCardItem = ({ users }) => {
             style={{ height: 52, width: 52, borderRadius: 30, marginLeft: 10 }}
           />
           <View
-            style={{
-              width: 16,
-              height: 16,
-              borderRadius: 8,
-              backgroundColor: "green",
-              borderWidth: 2,
-              borderColor: "white",
-              position: "absolute",
-              bottom: 0,
-              right: 0,
-            }}
+            style={[
+              {
+                width: 16,
+                height: 16,
+                borderRadius: 8,
+                borderWidth: 2,
+                borderColor: "white",
+                position: "absolute",
+                bottom: 0,
+                right: 0,
+              },
+              userStatus === "online"
+                ? { backgroundColor: "green" }
+                : { backgroundColor: "gray" },
+            ]}
           ></View>
         </View>
         <View style={{ marginLeft: 10, flexDirection: "column" }}>
