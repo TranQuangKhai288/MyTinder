@@ -15,14 +15,29 @@ const MessageCardItem = ({ users }) => {
   return (
     <View style={styles.containerCardItem}>
       <View style={styles.card}>
-        <Image
-          source={{
-            uri: users.avatar,
-          }}
-          style={{ height: 60, width: 60, borderRadius: 30, marginLeft: 10 }}
-        />
+        <View style={{ position: "relative" }}>
+          <Image
+            source={{
+              uri: users.avatar,
+            }}
+            style={{ height: 52, width: 52, borderRadius: 30, marginLeft: 10 }}
+          />
+          <View
+            style={{
+              width: 16,
+              height: 16,
+              borderRadius: 8,
+              backgroundColor: "green",
+              borderWidth: 2,
+              borderColor: "white",
+              position: "absolute",
+              bottom: 0,
+              right: 0,
+            }}
+          ></View>
+        </View>
         <View style={{ marginLeft: 10, flexDirection: "column" }}>
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+          <Text style={{ fontSize: 18, fontFamily: "LatoRegular" }}>
             {users.firstName} {users.lastName}
           </Text>
           <Text style={{ fontSize: 15 }} numberOfLines={1} ellipsizeMode="tail">
@@ -67,8 +82,6 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: 80,
     paddingHorizontal: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e6e6e6",
     flexDirection: "row",
     alignItems: "center",
   },

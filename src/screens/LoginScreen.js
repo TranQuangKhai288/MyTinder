@@ -22,11 +22,14 @@ import {
   loginUser,
   logoutUser,
   fetchAllUserData,
+  updateOnlineStatus,
 } from "../firebase/user";
 import { useFocusEffect } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import PopUpNotificationDialog from "./PopUpNotificationDialog";
 import { allUserFetch } from "../redux/actions/allUserActions";
+import { ref, set } from "firebase/database";
+import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
 
 const LoginScreen = ({ navigation }) => {
   console.log("LoginScreen");
@@ -80,6 +83,7 @@ const LoginScreen = ({ navigation }) => {
           dispatch(userLogin());
           let users = await fetchAllUserData();
           dispatch(allUserFetch(users.filter((u) => u.id !== user.id)));
+          updateOnlineStatus(user);
           if (userState.isSetUp) {
             navigation.navigate("BottomTab");
           } else {

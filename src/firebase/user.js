@@ -15,7 +15,8 @@ import {
   where,
   getDocs,
 } from "firebase/firestore";
-import { Alert } from "react-native";
+import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
+import { ref, set } from "firebase/database";
 
 // Register user with email and password
 export const registerUser = async (user, password, showNoti) => {
@@ -244,4 +245,20 @@ export const fetchAllUserData = async () => {
   } catch {
     console.log("Error fetching all user data: ", error);
   }
+};
+
+export const updateOnlineStatus = (user) => {
+  const statusRef = ref(FIREBASE_REALTIME_DB, "status/" + user.id);
+  set(statusRef, {
+    status: "online",
+    key: statusRef.key,
+  });
+};
+
+export const updateOfflineStatus = (user) => {
+  const statusRef = ref(FIREBASE_REALTIME_DB, "status/" + user.id);
+  set(statusRef, {
+    status: "offline",
+    key: statusRef.key,
+  });
 };

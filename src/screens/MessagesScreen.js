@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   Dimensions,
+  TextInput,
 } from "react-native";
 
 import {
@@ -25,16 +26,17 @@ import { StatusBar } from "expo-status-bar";
 import { FontAwesome5 } from "@expo/vector-icons";
 import MessageCardItem from "../components/MessageCardItem";
 import { ScrollView } from "react-native-virtualized-view";
-import { TextInput } from "react-native-gesture-handler";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addUserToFirestore,
   fetchAllUserData,
   updateUserChatsToFirestore,
+  logoutUser,
+  updateOfflineStatus,
 } from "../firebase/user";
 import { useFocusEffect } from "@react-navigation/native";
-import { userAddChats } from "../redux/actions/userActions";
+import { userAddChats, userLogout } from "../redux/actions/userActions";
 
 const MessagesScreen = ({ navigation }) => {
   const currentUser = useSelector((state) => state.user.user);
@@ -109,6 +111,12 @@ const MessagesScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={{ justifyContent: "flex-end", marginRight: 24 }}
+          onPress={() => {
+            dispatch(userLogout());
+            logoutUser();
+            updateOfflineStatus(currentUser);
+            navigation.navigate("LoginScreen");
+          }}
         >
           <Image
             source={{
@@ -158,12 +166,6 @@ const MessagesScreen = ({ navigation }) => {
       </View>
 
       {/* list  */}
-      <View style={{ paddingLeft: 22, marginTop: 16 }}>
-        <Text style={{ fontFamily: "SourceSansProBold", fontSize: 24 }}>
-          Message
-        </Text>
-      </View>
-
       <ScrollView
         style={{ marginBottom: 70, marginTop: 12 }}
         showsHorizontalScrollIndicator={false}

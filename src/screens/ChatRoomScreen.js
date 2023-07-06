@@ -70,7 +70,6 @@ const ChatRoomScreen = ({ navigation, route }) => {
     const messageRef = ref(FIREBASE_REALTIME_DB);
     const handleNewMessage = (snapshot) => {
       const message = snapshot.val();
-      const id = currentUser.id + user.id;
       if (message && message.chats && message.chats[chatID]) {
         const messageArray = Object.values(message.chats[chatID]).map(
           ({ key, message, sender, time }) => ({ key, message, sender, time })
@@ -130,17 +129,33 @@ const ChatRoomScreen = ({ navigation, route }) => {
               onPress={() => navigation.goBack()}
             />
 
-            <Image
-              source={{
-                uri: user.avatar,
-              }}
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 20,
-                marginLeft: 12,
-              }}
-            />
+            <View style={{ position: "relative" }}>
+              <Image
+                source={{
+                  uri: user.avatar,
+                }}
+                style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 22,
+                  marginLeft: 12,
+                }}
+              />
+              <View
+                style={{
+                  height: 14,
+                  width: 14,
+                  backgroundColor: "green",
+                  borderRadius: 7,
+                  marginRight: 2,
+                  position: "absolute",
+                  bottom: 0,
+                  right: 0,
+                  borderWidth: 2,
+                  borderColor: "#FFF",
+                }}
+              ></View>
+            </View>
             <View
               style={{
                 flexDirection: "column",
@@ -166,15 +181,6 @@ const ChatRoomScreen = ({ navigation, route }) => {
                   marginTop: 2,
                 }}
               >
-                <View
-                  style={{
-                    height: 10,
-                    width: 10,
-                    backgroundColor: "green",
-                    borderRadius: 5,
-                    marginRight: 2,
-                  }}
-                ></View>
                 <View>
                   <Text
                     style={{
@@ -183,7 +189,7 @@ const ChatRoomScreen = ({ navigation, route }) => {
                       color: "#777777",
                     }}
                   >
-                    Online now
+                    Online
                   </Text>
                 </View>
               </View>
