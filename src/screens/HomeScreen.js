@@ -19,7 +19,6 @@ const HomeScreen = ({ navigation }) => {
 
   const insets = useSafeAreaInsets();
   const allUsers = useSelector((state) => state.allUser.allUser);
-  console.log("all users:", allUsers);
   return (
     <View
       style={[
@@ -45,15 +44,13 @@ const HomeScreen = ({ navigation }) => {
         }}
       >
         <StatusBar style="light" />
-        <TouchableOpacity
-          style={{ justifyContent: "flex-start", marginLeft: 24 }}
-        >
+        <View style={{ marginLeft: 24 }}>
           <Text
             style={{ fontSize: 42, fontFamily: "Billabong", color: "black" }}
           >
             MyTinder
           </Text>
-        </TouchableOpacity>
+        </View>
         <View
           style={{
             alignItems: "center",

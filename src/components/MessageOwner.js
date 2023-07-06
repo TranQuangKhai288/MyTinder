@@ -21,9 +21,7 @@ const Message = () => {
         style={{
           marginRight: 8,
           backgroundColor: "#EC7686",
-          borderTopLeftRadius: 20,
-          borderBottomRightRadius: 20,
-          borderBottomLeftRadius: 20,
+          borderRadius: 20,
           padding: 12,
         }}
       >

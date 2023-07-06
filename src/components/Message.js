@@ -21,11 +21,9 @@ const Message = () => {
       <View
         style={{
           marginLeft: 8,
-          backgroundColor: "white",
+          backgroundColor: "#EEEEEE",
           padding: 12,
-          borderTopRightRadius: 20,
-          borderBottomRightRadius: 20,
-          borderBottomLeftRadius: 20,
+          borderRadius: 20,
         }}
       >
         <Text

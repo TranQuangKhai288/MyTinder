@@ -23,7 +23,7 @@ const ProfileScreen = ({ navigation }) => {
   const [messageDetail, setMessageDetail] = useState("");
   const [chatRoom, setChatRoom] = useState([]);
   const sendMessage = (message, user) => {
-    const messageRef = ref(FIREBASE_REALTIME_DB, "messages");
+    const messageRef = ref(FIREBASE_REALTIME_DB, "messages/chatss");
     const newChildRef = push(messageRef);
     set(newChildRef, {
       message: message,
@@ -34,12 +34,14 @@ const ProfileScreen = ({ navigation }) => {
     const messageRef = ref(FIREBASE_REALTIME_DB);
     const handleNewMessage = (snapshot) => {
       const message = snapshot.val();
+      let child = "chatss";
       if (message) {
-        console.log("message", message);
-        const messageArray = Object.values(message.messages).map(
+        console.log("message", message.messages[child]);
+        const messageArray = Object.values(message.messages[child]).map(
           ({ message, uid }) => ({ message, uid })
         );
         setChatRoom(messageArray);
+        console.log("messageArray", messageArray);
       }
     };
 

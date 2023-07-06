@@ -27,36 +27,21 @@ import MessageCardItem from "../components/MessageCardItem";
 import { ScrollView } from "react-native-virtualized-view";
 import { TextInput } from "react-native-gesture-handler";
 import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
-import { useSelector } from "react-redux";
-import { addUserToFirestore, fetchAllUserData } from "../firebase/user";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addUserToFirestore,
+  fetchAllUserData,
+  updateUserChatsToFirestore,
+} from "../firebase/user";
 import { useFocusEffect } from "@react-navigation/native";
+import { userAddChats } from "../redux/actions/userActions";
 
-const DATA = [
-  {
-    id: 1,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 20,
-    status: "online",
-  },
-  {
-    id: 2,
-    image:
-      "https://i.pinimg.com/736x/0b/22/97/0b2297a3c2d1006d93592c295cd4791b.jpg",
-    firstname: "Tran Quang",
-    lastname: "Tam",
-    age: 20,
-    status: "online",
-  },
-];
 const MessagesScreen = ({ navigation }) => {
   const currentUser = useSelector((state) => state.user.user);
+  const allUser = useSelector((state) => state.allUser.allUser);
   const [search, setSearch] = useState("");
   const [chats, setChats] = useState([]);
-  const [allUser, setallUser] = useState([]);
-
+  const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
 
   const searchUser = (val) => {
@@ -67,55 +52,27 @@ const MessagesScreen = ({ navigation }) => {
     // setallUser(filteredList);
   };
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      let users = await fetchAllUserData();
-      setallUser(users.filter((item) => item.id !== currentUser.id));
-      console.log("all user", allUser);
-    };
-
-    fetchUserData();
-  }, []);
-
   const handleChatRoom = async (user) => {
-    //check wherther the group (chats in firestore) chat is exist or not
-    const combinedId =
-      currentUser.id > user.id
-        ? currentUser.id + user.id
-        : user.id + currentUser.id;
-
-    try {
-      const res = await getDoc(doc(FIRESTORE_DB, "chats", combinedId));
-      if (!res.exists()) {
-        //create a chat in chats collection
-        await setDoc(doc(FIRESTORE_DB, "chats", combinedId), {
-          messages: [],
-        });
-
-        //create user chats
-        await updateDoc(doc(FIRESTORE_DB, "userChats", currentUser.id), {
-          [combinedId + ".userInfo"]: {
-            id: user.id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            avatar: user.avatar,
-          },
-        });
-
-        await updateDoc(doc(FIRESTORE_DB, "userChats", user.id), {
-          [combinedId + ".userInfo"]: {
-            id: currentUser.id,
-            firstName: currentUser.firstName,
-            lastName: currentUser.lastName,
-            avatar: currentUser.avatar,
-          },
-        });
-      }
-    } catch (err) {
-      console.log(err);
+    const id1 = currentUser.id + user.id;
+    const id2 = user.id + currentUser.id;
+    if (
+      currentUser.chats.indexOf(id1) === -1 &&
+      currentUser.chats.indexOf(id2) === -1
+    ) {
+      const newUser = user;
+      const newUser2 = currentUser;
+      newUser.chats.push(id1);
+      newUser2.chats.push(id1);
+      dispatch(userAddChats(id1));
+      await updateUserChatsToFirestore(newUser);
+      await updateUserChatsToFirestore(newUser2);
+      navigation.navigate("ChatRoomScreen", { user: user, chatID: id1 });
+    } else {
+      if (currentUser.chats.indexOf(id1) !== -1)
+        navigation.navigate("ChatRoomScreen", { user: user, chatID: id1 });
+      else if (currentUser.chats.indexOf(id2) !== -1)
+        navigation.navigate("ChatRoomScreen", { user: user, chatID: id2 });
     }
-    navigation.navigate("ChatRoomScreen");
-    //create user chats
   };
 
   return (
@@ -232,6 +189,7 @@ const MessagesScreen = ({ navigation }) => {
           />
         </View>
       </ScrollView>
+      <StatusBar style="dark" />
     </View>
   );
 };

@@ -13,6 +13,7 @@ import {
   USER_UPDATE_INTERESTS,
   USER_UPDATE_IS_VERIFIED,
   USER_UPDATE_IS_SET_UP,
+  USER_ADD_CHATS,
 } from "../actions/userActions";
 
 const userInitialState = {
@@ -144,6 +145,14 @@ const userReducer = (state = userInitialState, action) => {
         user: {
           ...state.user,
           isSetUp: action.payload,
+        },
+      };
+    case USER_ADD_CHATS:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          chats: [...state.user.chats, action.payload],
         },
       };
     default:

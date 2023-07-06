@@ -23,7 +23,7 @@ const MessageCardItem = ({ users }) => {
         />
         <View style={{ marginLeft: 10, flexDirection: "column" }}>
           <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            {users.firstName}
+            {users.firstName} {users.lastName}
           </Text>
           <Text style={{ fontSize: 15 }} numberOfLines={1} ellipsizeMode="tail">
             messages

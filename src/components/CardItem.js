@@ -14,8 +14,6 @@ import { BlurView } from "expo-blur";
 import { Entypo } from "@expo/vector-icons";
 
 const CardItem = ({ info }) => {
-  console.log(info);
-
   return (
     <View style={styles.containerCardItem}>
       {/* IMAGE */}

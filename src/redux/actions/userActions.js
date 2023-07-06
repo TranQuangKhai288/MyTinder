@@ -12,6 +12,7 @@ export const USER_UPDATE_GENDER = "USER_UPDATE_GENDER";
 export const USER_UPDATE_INTERESTS = "USER_UPDATE_INTERESTS";
 export const USER_UPDATE_IS_VERIFIED = "USER_UPDATE_IS_VERIFIED";
 export const USER_UPDATE_IS_SET_UP = "USER_UPDATE_IS_SET_UP";
+export const USER_ADD_CHATS = "USER_ADD_CHATS";
 
 export const userLogin = () => ({
   type: USER_LOGIN,
@@ -79,4 +80,9 @@ export const userUpdateIsVerified = (isVerified) => ({
 export const userUpdateIsSetUp = (isSetUp) => ({
   type: USER_UPDATE_IS_SET_UP,
   payload: isSetUp,
+});
+
+export const userAddChats = (chat) => ({
+  type: USER_ADD_CHATS,
+  payload: chat,
 });
