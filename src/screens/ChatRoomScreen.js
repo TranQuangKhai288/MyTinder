@@ -12,14 +12,14 @@ import {
   TouchableOpacity,
   ImageBackground,
   Dimensions,
+  FlatList,
+  ScrollView,
+  TextInput,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
-import { ScrollView, TextInput } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
 import { Icon, Avatar } from "react-native-elements";
-
-import { FlatList } from "react-native-gesture-handler";
 import color, { LIGHT_RED_COLOR, RED_COLOR } from "../constants/color";
 import { useSelector } from "react-redux";
 import {
@@ -38,6 +38,7 @@ const ChatRoomScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const [chats, setChats] = useState([]);
   const currentUser = useSelector((state) => state.user.user);
+  const [chatting, setChatting] = useState(false);
 
   useEffect(() => {
     const getChats = () => {
@@ -72,9 +73,8 @@ const ChatRoomScreen = ({ navigation }) => {
         {/* header */}
         <View
           style={{
-            height: 50,
             backgroundColor: RED_COLOR,
-            paddingLeft: 12,
+            padding: 12,
             alignItems: "center",
             flexDirection: "row",
           }}
@@ -84,6 +84,7 @@ const ChatRoomScreen = ({ navigation }) => {
               flexDirection: "row",
               alignItems: "center",
               width: Dimensions.get("window").width,
+              paddingHorizontal: 4,
             }}
           >
             <Icon
@@ -102,18 +103,18 @@ const ChatRoomScreen = ({ navigation }) => {
                 width: 40,
                 height: 40,
                 borderRadius: 20,
-                marginLeft: 8,
+                marginLeft: 12,
               }}
             />
             <Text
               style={{
                 color: "white",
                 fontSize: 18,
-                marginLeft: 8,
+                marginLeft: 12,
                 fontFamily: "LatoBold",
               }}
             >
-              "Tran Quang Khai"
+              Tran Quang Khai
             </Text>
           </View>
         </View>
@@ -123,40 +124,37 @@ const ChatRoomScreen = ({ navigation }) => {
             style={{
               height: Dimensions.get("window").height,
             }}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
           >
             <Messages />
           </ScrollView>
 
           <View
-            style={{
-              backgroundColor: RED_COLOR,
-              padding: 12,
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              borderTopWidth: 0.7,
-              borderColor: "D6D6D6",
-            }}
-          >
-            <View
-              style={{
-                borderWidth: 1,
-                borderColor: "#CDCDCD",
-                borderRadius: 16,
-                height: 48,
-                backgroundColor: "#E6E6E6",
-                width: Dimensions.get("window").width - 70,
+            style={[
+              {
+                backgroundColor: RED_COLOR,
+                paddingHorizontal: 16,
+                paddingVertical: 12,
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: 10,
-              }}
-            >
+              },
+              chatting ? { paddingBottom: 320 } : {},
+            ]}
+          >
+            <View>
               <TextInput
                 placeholder="Say something..."
                 autoCapitalize="none"
                 style={[styles.input]}
                 fontSize={16}
+                onFocus={() => {
+                  setChatting(true);
+                }}
+                onBlur={() => {
+                  setChatting(false);
+                }}
               />
             </View>
             <TouchableOpacity>
@@ -166,6 +164,8 @@ const ChatRoomScreen = ({ navigation }) => {
                 }}
                 name="send"
                 type="Ionicons"
+                size={32}
+                color="white"
               />
             </TouchableOpacity>
           </View>
@@ -179,6 +179,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: RED_COLOR,
+  },
+  input: {
+    backgroundColor: "white",
+    padding: 12,
+    width: Dimensions.get("window").width - 80,
+    borderRadius: 20,
+    fontSize: 18,
   },
 });
 

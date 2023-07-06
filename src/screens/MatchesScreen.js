@@ -13,7 +13,6 @@ import { StatusBar } from "expo-status-bar";
 import CardItem from "../components/CardItem";
 import { useSelector } from "react-redux";
 import { ScrollView } from "react-native-virtualized-view";
-import { useSelector } from "react-redux";
 
 const DATA = [
   {

@@ -67,9 +67,6 @@ const SignUpScreen = ({ navigation }) => {
           navigation.navigate("LoginScreen");
         }
         setIsLoading(false);
-
-        //create empty user chats on firestore
-        await setDoc(doc(FIRESTORE_DB, "userChats", user.id), {});
       } catch (error) {
         console.log("Error register user: ", error);
         setIsLoading(false);

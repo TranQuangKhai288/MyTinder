@@ -207,7 +207,11 @@ const MessagesScreen = ({ navigation }) => {
         </Text>
       </View>
 
-      <ScrollView style={{ marginBottom: 70, marginTop: 12 }}>
+      <ScrollView
+        style={{ marginBottom: 70, marginTop: 12 }}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={{ paddingBottom: 36 }}>
           <FlatList
             style={{

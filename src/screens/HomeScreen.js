@@ -10,108 +10,6 @@ import Icon from "react-native-vector-icons/FontAwesome"; // Replace with the ap
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
 
-const DEMO_DATA = [
-  {
-    id: 1,
-    firstName: "Tran",
-    lastName: "Quang Khai",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: 20,
-  },
-  {
-    id: 2,
-    firstName: "Nguyen",
-    lastName: "Van Vu",
-    occupation: "Software Developer",
-    imageURL: "https://pbs.twimg.com/media/DRxkTmYUQAAHqDX.jpg:large",
-
-    age: "20",
-  },
-  {
-    id: 3,
-    firstName: "Tran",
-    lastName: "Qfdsjghrewiobhfds",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-  {
-    id: 4,
-    firstName: "Tran",
-    lastName: "Quang Khai vdnsbahjfkbreavbadsjhvbreayiu",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-  {
-    id: 5,
-    firstName: "Tran",
-    lastName: "Quang Khai",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-  {
-    id: 6,
-    firstName: "Tran",
-    lastName: "Quang Khai",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-  {
-    id: 7,
-    firstName: "Tran",
-    lastName: "Quang Khai",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-  {
-    id: 8,
-    firstName: "Tran",
-    lastName: "Quang Khai",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-  {
-    id: 9,
-    firstName: "Tran",
-    lastName: "Quang Khai",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-  {
-    id: 10,
-    firstName: "Tran",
-    lastName: "Quang Khai",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-  {
-    id: 11,
-    firstName: "Tran",
-    lastName: "Quang Khai",
-    occupation: "Software Developer",
-    imageURL:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    age: "20",
-  },
-];
-
 const HomeScreen = ({ navigation }) => {
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -122,12 +20,6 @@ const HomeScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const allUsers = useSelector((state) => state.allUser.allUser);
   console.log("all users:", allUsers);
-
-  const [fontsLoaded] = useFonts({
-    Billabong: require("../assets/fonts/Billabong.ttf"),
-    SourceSansProBold: require("../assets/fonts/SourceSansPro-Bold.ttf"),
-  });
-  if (!fontsLoaded) return undefined;
   return (
     <View
       style={[

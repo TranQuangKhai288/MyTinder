@@ -12,4 +12,5 @@ export const FONTS = {
   LatoLightItalic: require("../assets/fonts/Lato-LightItalic.ttf"),
   LatoThin: require("../assets/fonts/Lato-Thin.ttf"),
   LatoThinItalic: require("../assets/fonts/Lato-ThinItalic.ttf"),
+  Billabong: require("../assets/fonts/Billabong.ttf"),
 };
