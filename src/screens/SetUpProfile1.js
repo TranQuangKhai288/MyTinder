@@ -8,6 +8,9 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
+  Platform,
+  Pressable,
+  TextInput,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
@@ -17,7 +20,6 @@ import {
   LIGHT_RED_COLOR,
   RED_COLOR,
 } from "../constants/color";
-import { TextInput } from "react-native";
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -29,7 +31,9 @@ import {
 } from "../redux/actions/userActions";
 import { useFocusEffect } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import PopUpNotificationDialog from "./PopUpNotificationDialog";
+import { set } from "firebase/database";
 
 const SetUpProfile1 = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
@@ -46,6 +50,27 @@ const SetUpProfile1 = ({ navigation }) => {
   const [enableNextButton, setEnableNextButton] = useState(true);
   const [isShowPopUp, setIsShowPopUp] = useState(false);
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [date, setDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+
+  const toggleShowPicker = () => {
+    setShowPicker(!showPicker);
+  };
+
+  const onChange = ({ type }, selectedDate) => {
+    if (type === "set") {
+      const currentDate = selectedDate;
+      setDate(currentDate);
+      if (Platform.OS === "android") {
+        toggleShowPicker();
+        setDateOfBirth(currentDate.toDateString());
+      }
+    } else {
+      toggleShowPicker();
+    }
+  };
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -208,10 +233,53 @@ const SetUpProfile1 = ({ navigation }) => {
               />
             </View>
           </View>
-          <View style={styles.choose_birthday_wrapper}>
-            <Text style={{ fontSize: 18, fontFamily: "SourceSansProRegular" }}>
-              Choose Birthday
-            </Text>
+          <View style={styles.name_wrapper}>
+            <View style={styles.name_header_wrapper}>
+              <Text style={styles.name_header_text}>Birthday</Text>
+            </View>
+            {showPicker && (
+              <View style={styles.choose_birthday_wrapper}>
+                <DateTimePicker
+                  mode="date"
+                  display="spinner"
+                  value={date}
+                  onChange={onChange}
+                />
+                <TextInput
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "SourceSansProRegular",
+                    marginLeft: 10,
+                  }}
+                  editable={false}
+                  placeholder="Choose your birthday"
+                  value={dateOfBirth}
+                  onChangeText={setDateOfBirth}
+                  placeholderTextColor={RED_COLOR}
+                  color={RED_COLOR}
+                />
+              </View>
+            )}
+            {!showPicker && (
+              <Pressable
+                style={styles.choose_birthday_wrapper}
+                onPress={toggleShowPicker}
+              >
+                <TextInput
+                  style={{
+                    fontSize: 20,
+                    fontFamily: "SourceSansProRegular",
+                    marginLeft: 10,
+                  }}
+                  editable={false}
+                  placeholder="Choose your birthday"
+                  value={dateOfBirth}
+                  onChangeText={setDateOfBirth}
+                  placeholderTextColor={RED_COLOR}
+                  color={RED_COLOR}
+                />
+              </Pressable>
+            )}
           </View>
         </View>
 
@@ -302,12 +370,11 @@ const styles = StyleSheet.create({
   },
   choose_birthday_wrapper: {
     width: "100%",
-    marginTop: 32,
     backgroundColor: LIGHT_RED_COLOR,
     paddingVertical: 20,
     borderRadius: 16,
     justifyContent: "center",
-    alignItems: "center",
+    //alignItems: "center",
   },
   footer_wrapper: {
     marginTop: 60,
