@@ -128,10 +128,11 @@ const DATA = [
 
 const MatchesScreen = ({ navigation }) => {
   const currentUser = useSelector((state) => state.user.user);
+  const allUser = useSelector((state) => state.allUser.allUser);
   const insets = useSafeAreaInsets();
-  const handleMatchesinfo = () => {
-    // Perform login logic here
-    navigation.navigate("OtherProfileScreen");
+  const handleMatchesinfo = (user) => {
+    console.log("user before navigate", user);
+    navigation.navigate("OtherProfileScreen", user);
   };
 
   return (
@@ -194,10 +195,15 @@ const MatchesScreen = ({ navigation }) => {
               backgroundColor: "transparent",
             }}
             numColumns={2}
-            data={DATA}
+            data={allUser}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity onPress={handleMatchesinfo}>
+              <TouchableOpacity
+                onPress={() => {
+                  handleMatchesinfo(item);
+                  console.log("item: ", item);
+                }}
+              >
                 <CardItem info={item} />
               </TouchableOpacity>
             )}

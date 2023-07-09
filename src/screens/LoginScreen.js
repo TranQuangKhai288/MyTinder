@@ -27,7 +27,7 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import PopUpNotificationDialog from "./PopUpNotificationDialog";
-import { allUserFetch } from "../redux/actions/allUserActions";
+import { allUserClear, allUserFetch } from "../redux/actions/allUserActions";
 import { ref, set } from "firebase/database";
 import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
 
@@ -66,6 +66,7 @@ const LoginScreen = ({ navigation }) => {
       setIsLoading(true);
       setEnableNextButton(false);
       dispatch(userLogout());
+      dispatch(allUserClear());
       logoutUser();
       let user = userState;
       user.email = gmail;

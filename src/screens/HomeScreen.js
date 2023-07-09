@@ -9,6 +9,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/FontAwesome"; // Replace with the appropriate icon library import
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector } from "react-redux";
+import { SvgXml } from "react-native-svg";
+import { CloseIcon, HeartIcon } from "../constants/icons";
+import { RED_COLOR } from "../constants/color";
 
 const HomeScreen = ({ navigation }) => {
   useLayoutEffect(() => {
@@ -19,6 +22,7 @@ const HomeScreen = ({ navigation }) => {
 
   const insets = useSafeAreaInsets();
   const allUsers = useSelector((state) => state.allUser.allUser);
+  const currentUser = useSelector((state) => state.user.user);
   return (
     <View
       style={[
@@ -43,7 +47,6 @@ const HomeScreen = ({ navigation }) => {
           justifyContent: "space-between",
         }}
       >
-        <StatusBar style="light" />
         <View style={{ marginLeft: 24 }}>
           <Text
             style={{ fontSize: 42, fontFamily: "Billabong", color: "black" }}
@@ -57,25 +60,22 @@ const HomeScreen = ({ navigation }) => {
             position: "relative",
             flexDirection: "row",
             justifyContent: "flex-end",
-            marginEnd: 24,
           }}
         >
           <TouchableOpacity
-            style={{ justifyContent: "center", alignItems: "center" }}
+            style={{ justifyContent: "flex-end", marginRight: 24 }}
           >
-            <Icon
-              name="bell"
-              size={28}
-              style={{ marginEnd: 8, color: "black" }}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ justifyContent: "center", alignItems: "center" }}
-          >
-            <Icon
-              name="history"
-              size={28}
-              style={{ marginStart: 12, color: "black" }}
+            <Image
+              source={{
+                uri: currentUser.avatar,
+              }}
+              style={{
+                height: 40,
+                width: 40,
+                borderRadius: 20,
+                alignItems: "center",
+                marginBottom: 8,
+              }}
             />
           </TouchableOpacity>
         </View>
@@ -92,6 +92,8 @@ const HomeScreen = ({ navigation }) => {
           onSwipedRight={() => {
             console.log("Swipe MATCH");
           }}
+          disableBottomSwipe={true}
+          disableTopSwipe={true}
           overlayLabels={{
             left: {
               element: (
@@ -193,10 +195,10 @@ const HomeScreen = ({ navigation }) => {
             borderRadius: 100,
             width: 58,
             height: 58,
-            backgroundColor: "#FF4545",
+            backgroundColor: "#EEEEEE",
           }}
         >
-          <Entypo name="cross" size={36} color={"#ffffff"} />
+          <SvgXml xml={CloseIcon} width={32} height={32} />
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -206,14 +208,15 @@ const HomeScreen = ({ navigation }) => {
             borderRadius: 100,
             width: 58,
             height: 58,
-            backgroundColor: "#45FF5A",
+            backgroundColor: RED_COLOR,
           }}
         >
-          <Entypo name="heart" size={36} color={"#ffffff"} />
+          <SvgXml xml={HeartIcon} width={32} height={32} />
         </TouchableOpacity>
       </View>
 
       {/* end of button */}
+      <StatusBar style="dark" />
     </View>
   );
 };

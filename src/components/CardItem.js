@@ -12,6 +12,9 @@ import {
 
 import { BlurView } from "expo-blur";
 import { Entypo } from "@expo/vector-icons";
+import { SvgXml } from "react-native-svg";
+import { CloseIcon, HeartIcon } from "../constants/icons";
+import { RED_COLOR } from "../constants/color";
 
 const CardItem = ({ info }) => {
   return (
@@ -20,7 +23,7 @@ const CardItem = ({ info }) => {
       <View style={styles.card}>
         <ImageBackground
           source={{
-            uri: info.image,
+            uri: info.avatar,
           }}
           style={{
             width: Dimensions.get("window").width / 2.5,
@@ -28,49 +31,52 @@ const CardItem = ({ info }) => {
           }}
         >
           <View style={styles.content}>
-            <View style={styles.text_wrapper}>
-              <View style={styles.text_infor_wrapper}>
-                <Text style={styles.textName}>{info.lastname},</Text>
-                <Text style={styles.textAge}>{info.age}</Text>
-              </View>
-            </View>
-
-            <BlurView style={styles.blur} tint="dark" intensity={70}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "space-around",
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Entypo name="cross" size={30} color={"#ffffff"} />
-                </TouchableOpacity>
-
-                <View
-                  style={{
-                    borderWidth: 1,
-                    height: Dimensions.get("window").height / 18,
-                    borderColor: "#ffffff",
-                  }}
-                />
-                <TouchableOpacity
-                  style={{
-                    flex: 1,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Entypo name="heart" size={30} color={"#ffffff"} />
-                </TouchableOpacity>
+            <BlurView style={styles.blur} tint="dark" intensity={50}>
+              <View style={styles.text_wrapper}>
+                <View style={styles.text_infor_wrapper}>
+                  <Text style={styles.textName}>{info.firstName},</Text>
+                  <Text style={styles.textAge}>20</Text>
+                </View>
               </View>
             </BlurView>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "space-around",
+              }}
+            >
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#EEEEEE",
+                  height: 36,
+                }}
+              >
+                <SvgXml xml={CloseIcon} width={24} height={28} />
+              </TouchableOpacity>
+
+              <View
+                style={{
+                  borderWidth: 2,
+                  height: 36,
+                  borderColor: "#ffffff",
+                }}
+              />
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: 36,
+                  backgroundColor: RED_COLOR,
+                }}
+              >
+                <SvgXml xml={HeartIcon} width={24} height={28} />
+              </TouchableOpacity>
+            </View>
           </View>
         </ImageBackground>
       </View>
@@ -99,10 +105,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
     bottom: 0,
+    width: "100%",
   },
   blur: {
-    width: Dimensions.get("window").width / 2.5,
-    height: Dimensions.get("window").height / 18,
+    width: "100%",
     blurType: "xlight",
   },
   text_wrapper: {
@@ -117,12 +123,12 @@ const styles = StyleSheet.create({
   },
   textName: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 22,
     fontFamily: "SourceSansProRegular",
   },
   textAge: {
     color: "#fff",
-    fontSize: 23,
+    fontSize: 21,
     marginLeft: 8,
     fontFamily: "SourceSansProRegular",
   },

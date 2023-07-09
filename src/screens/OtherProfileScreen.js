@@ -17,9 +17,9 @@ import { RED_COLOR } from "../constants/color";
 import { useSelector } from "react-redux";
 import { gender, interests } from "../assets/data/data";
 
-const OtherProfileScreen = ({ navigation }) => {
+const OtherProfileScreen = ({ navigation, route }) => {
   const insets = useSafeAreaInsets();
-  const user = useSelector((state) => state.user.user);
+  const user = route.params;
   console.log(user);
   const gallery = [
     require("../assets/images/test-gallery1.png"),
