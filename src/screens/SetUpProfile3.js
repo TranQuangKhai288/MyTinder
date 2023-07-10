@@ -25,6 +25,8 @@ import {
   updateUserDocumentToFirestore,
   updateUserInterestsToFirestore,
 } from "../firebase/user";
+import LoadingScreen from "./LoadingScreen";
+import { set } from "firebase/database";
 
 const SetUpProfile3 = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
@@ -32,6 +34,7 @@ const SetUpProfile3 = ({ navigation }) => {
   const inset = useSafeAreaInsets();
   const [selectedInterestID, setSelectedInterestID] = useState([]);
   const [enableNextButton, setEnableNextButton] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     setSelectedInterestID(user.interests);
   }, []);
@@ -157,6 +160,7 @@ const SetUpProfile3 = ({ navigation }) => {
           style={styles.footer_button}
           disabled={!enableNextButton}
           onPress={async () => {
+            setIsLoading(true);
             setEnableNextButton(false);
             let updatedUser = user;
             updatedUser.interests = selectedInterestID;
@@ -167,11 +171,13 @@ const SetUpProfile3 = ({ navigation }) => {
             dispatch(userUpdateIsSetUp(true));
             await updateUserDocumentToFirestore(updatedUser);
             navigation.navigate("BottomTab");
+            setIsLoading(false);
           }}
         >
           <Text style={styles.footer_button_text}>Done</Text>
         </TouchableOpacity>
       </View>
+      <LoadingScreen visible={isLoading} />
       <StatusBar style="dark" />
     </View>
   );

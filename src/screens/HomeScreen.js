@@ -23,6 +23,7 @@ const HomeScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const allUsers = useSelector((state) => state.allUser.allUser);
   const currentUser = useSelector((state) => state.user.user);
+  console.log("allUsers: ", allUsers);
   return (
     <View
       style={[
@@ -160,7 +161,10 @@ const HomeScreen = ({ navigation }) => {
                         {card.firstName} {card.lastName}
                       </Text>
                       <Text style={styles.textAge}>
-                        {!card.birthday ? "20" : card.birthday}
+                        {!card.birthday
+                          ? "20"
+                          : new Date().getFullYear() -
+                            new Date(card.birthday).getFullYear()}
                       </Text>
                     </View>
                     <Text style={styles.text}>{card.occupation}</Text>
@@ -255,6 +259,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
+    paddingVertical: 8,
   },
   card: {
     flex: 0.8,
@@ -272,7 +277,7 @@ const styles = StyleSheet.create({
   text_infor_wrapper: { flexDirection: "row", alignItems: "flex-end" },
   text: { color: "#fff", fontSize: 16 },
   textName: { color: "#fff", fontSize: 28 },
-  textAge: { color: "#fff", fontSize: 24, marginLeft: 8 },
+  textAge: { color: "#fff", fontSize: 26, marginLeft: 8 },
 });
 
 export default HomeScreen;

@@ -26,7 +26,11 @@ import { StatusBar } from "expo-status-bar";
 import { FontAwesome5 } from "@expo/vector-icons";
 import MessageCardItem from "../components/MessageCardItem";
 import { ScrollView } from "react-native-virtualized-view";
-import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
+import {
+  FIREBASE_AUTH,
+  FIREBASE_REALTIME_DB,
+  FIRESTORE_DB,
+} from "../../firebaseConfig";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addUserToFirestore,
@@ -37,45 +41,36 @@ import {
 } from "../firebase/user";
 import { useFocusEffect } from "@react-navigation/native";
 import { userAddChats, userLogout } from "../redux/actions/userActions";
+import { ref, get } from "firebase/database";
+import { getRefLength } from "../firebase/chat";
+import MessageItem from "../components/MessageItem";
 
 const MessagesScreen = ({ navigation }) => {
   const currentUser = useSelector((state) => state.user.user);
   const allUser = useSelector((state) => state.allUser.allUser);
-  const [search, setSearch] = useState("");
-  const [chats, setChats] = useState([]);
+  const [keySearch, setKeySearch] = useState("");
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
 
-  const searchUser = (val) => {
-    // setSearch(val);
-    // const filteredList = users.filter((item) =>
-    //   item.name.toLowerCase().includes(text.toLowerCase())
-    // );
-    // setallUser(filteredList);
-  };
-
   const handleChatRoom = async (user) => {
+    let chatid = "";
     const id1 = currentUser.id + user.id;
     const id2 = user.id + currentUser.id;
-    if (
-      currentUser.chats.indexOf(id1) === -1 &&
-      currentUser.chats.indexOf(id2) === -1
-    ) {
-      const newUser = user;
-      const newUser2 = currentUser;
-      newUser.chats.push(id1);
-      newUser2.chats.push(id1);
-      dispatch(userAddChats(id1));
-      await updateUserChatsToFirestore(newUser);
-      await updateUserChatsToFirestore(newUser2);
-      navigation.navigate("ChatRoomScreen", { user: user, chatID: id1 });
-    } else {
-      if (currentUser.chats.indexOf(id1) !== -1)
-        navigation.navigate("ChatRoomScreen", { user: user, chatID: id1 });
-      else if (currentUser.chats.indexOf(id2) !== -1)
-        navigation.navigate("ChatRoomScreen", { user: user, chatID: id2 });
-    }
+    if (currentUser.id.localeCompare(user.id) === -1) chatid = id1;
+    else chatid = id2;
+    navigation.navigate("ChatRoomScreen", { user: user, chatID: chatid });
   };
+
+  // useEffect(() => {
+  //   const id1 = currentUser.id + user.id;
+  //   const id2 = user.id + currentUser.id;
+  //   const chatRef1 = ref(FIREBASE_REALTIME_DB, "chats/" + id1);
+  //   const chatRef2 = ref(FIREBASE_REALTIME_DB, "chats/" + id2);
+  //   let chatRef;
+  //   if (getRefLength(chatRef1) > 0) chatRef = chatRef1;
+  //   else if (getRefLength(chatRef2 > 0)) chatRef = chatRef2;
+  //   else chatRef = false;
+  // }, []);
 
   return (
     <View
@@ -140,13 +135,13 @@ const MessagesScreen = ({ navigation }) => {
           borderWidth: 1,
           borderRadius: 16,
           borderColor: "#e8e6ea",
-          height: 48,
-          marginHorizontal: 48,
           marginTop: 16,
           flexDirection: "row",
           alignItems: "center",
           paddingHorizontal: 16,
           backgroundColor: "#f0f0f0",
+          width: "90%",
+          alignSelf: "center",
         }}
       >
         <FontAwesome5
@@ -157,11 +152,10 @@ const MessagesScreen = ({ navigation }) => {
         />
         <TextInput
           placeholder="Search by name..."
-          onChangeText={(val) => searchUser(val)}
-          autoCapitalize="none"
-          value={search}
-          style={[styles.input]}
-          marginLeft={16}
+          onChangeText={(val) => {
+            setKeySearch(val);
+          }}
+          style={styles.input}
         />
       </View>
 
@@ -177,16 +171,22 @@ const MessagesScreen = ({ navigation }) => {
               backgroundColor: "transparent",
             }}
             numColumns={1}
-            data={allUser}
+            data={allUser.filter((user) => {
+              let userName = user.firstName + " " + user.lastName;
+              return (
+                userName.toLowerCase().indexOf(keySearch.toLowerCase()) !== -1
+              );
+            })}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  handleChatRoom(item);
-                }}
-              >
-                <MessageCardItem users={item} />
-              </TouchableOpacity>
+              <View key={item.id}>
+                <MessageItem
+                  item={item}
+                  handleChatRoom={() => {
+                    handleChatRoom(item);
+                  }}
+                />
+              </View>
             )}
           />
         </View>
@@ -203,11 +203,13 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   input: {
-    height: 40,
     flex: 1,
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
     color: "#333",
+    paddingVertical: 12,
+    paddingHorizontal: 4,
+    marginLeft: 8,
   },
 });
 

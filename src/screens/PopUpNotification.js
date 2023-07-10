@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text, Modal } from "react-native";
 import { SCREEN_HEIGHT } from "../constants/constants";
 
-const PopUpNotification = ({ message }) => {
+const PopUpNotification = ({ message, onRequestClose }) => {
   const [show, setShow] = useState(true);
   useEffect(() => {
     setTimeout(() => {
       setShow(false);
+      onRequestClose();
     }, 3000);
   }, [show]);
   return (

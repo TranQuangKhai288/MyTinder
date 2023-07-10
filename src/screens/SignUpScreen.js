@@ -23,6 +23,9 @@ import PopUpNotificationDialog from "./PopUpNotificationDialog";
 import { useSelector } from "react-redux";
 import { addUserToFirestore, registerUser } from "../firebase/user";
 import LoadingScreen from "./LoadingScreen";
+import { set } from "firebase/database";
+import { useEffect } from "react";
+import PopUpNotification from "./PopUpNotification";
 const SignUpScreen = ({ navigation }) => {
   const userState = useSelector((state) => state.user.user);
   //text input states
@@ -33,15 +36,43 @@ const SignUpScreen = ({ navigation }) => {
   const [checkSamePassword, setCheckSamePassword] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
+  const [showPopUp2, setShowPopUp2] = useState(false);
   const [popUpMessage, setPopUpMessage] = useState({
     title: "",
     content: "",
   });
 
+  useEffect(() => {
+    const reset = () => {
+      setGmail("");
+      setPassword("");
+      setCheckEmptyGmail(false);
+      setCheckEmptyPassword(false);
+      setCheckSamePassword(true);
+      setIsLoading(false);
+      setShowPopUp(false);
+      setShowPopUp2(false);
+      setPopUpMessage({
+        title: "",
+        content: "",
+      });
+
+      reset();
+    };
+  }, []);
+
   const showAlert = (title, content) => {
     setShowPopUp(true);
     setPopUpMessage({
       title: title,
+      content: content,
+    });
+  };
+
+  const showAlert2 = (content) => {
+    setShowPopUp2(true);
+    setPopUpMessage({
+      title: "",
       content: content,
     });
   };
@@ -60,13 +91,21 @@ const SignUpScreen = ({ navigation }) => {
       user.email = gmail;
       user.succesfulRegister = false;
       try {
-        await registerUser(user, password, showAlert);
+        await registerUser(user, password, showAlert, showAlert2);
         if (user.succesfulRegister) {
           console.log("Register successful");
           await addUserToFirestore(user);
-          navigation.navigate("LoginScreen");
+          // setTimeout(() => {
+          //   navigation.navigate("LoginScreen");
+          // }, 3000);
+          setIsLoading(false);
+          setTimeout(() => {
+            navigation.navigate("LoginScreen");
+          }, 1500);
+          console.log("Navigate to login screen");
+        } else {
+          setIsLoading(false);
         }
-        setIsLoading(false);
       } catch (error) {
         console.log("Error register user: ", error);
         setIsLoading(false);
@@ -75,7 +114,9 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const handleLogin = () => {
-    navigation.navigate("LoginScreen");
+    {
+      navigation.navigate("LoginScreen");
+    }
   };
 
   const handleSignUpByPhoneNumber = () => {
@@ -173,7 +214,12 @@ const SignUpScreen = ({ navigation }) => {
               }}
             />
           </View>
-          <TouchableOpacity style={styles.loginButton} onPress={handleSignUp}>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => {
+              handleSignUp();
+            }}
+          >
             <Text style={styles.buttonText}>Sign Up</Text>
           </TouchableOpacity>
 
@@ -219,6 +265,14 @@ const SignUpScreen = ({ navigation }) => {
         message={popUpMessage.content}
       />
       <LoadingScreen visible={isLoading} />
+      {showPopUp2 ? (
+        <PopUpNotification
+          onRequestClose={() => {
+            setShowPopUp2(false);
+          }}
+          message={popUpMessage.content}
+        />
+      ) : null}
     </View>
   );
 };

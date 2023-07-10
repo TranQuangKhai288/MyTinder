@@ -74,7 +74,10 @@ const OtherProfileScreen = ({ navigation, route }) => {
             <View style={styles.name_wrapper}>
               <Text style={styles.name_text}>
                 {`${user.firstName} ${user.lastName}`},{" "}
-                {!user.birthday ? 20 : user.birthday}
+                {!user.birthday
+                  ? 20
+                  : new Date().getFullYear() -
+                    new Date(user.birthday).getFullYear()}
               </Text>
               <View>
                 {user.gender === 1 || user.gender === 2 ? (
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
     borderColor: "#FFF",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#FFFFFF50",
+    backgroundColor: "#55555550",
     borderRadius: 12,
     borderWidth: 1,
     position: "absolute",

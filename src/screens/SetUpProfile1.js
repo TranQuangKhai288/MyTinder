@@ -28,6 +28,7 @@ import {
   userUpdateLastName,
   userUpdateOccupation,
   userUpdateAboutMe,
+  userUpdateBirthday,
 } from "../redux/actions/userActions";
 import { useFocusEffect } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
@@ -42,7 +43,6 @@ const SetUpProfile1 = ({ navigation }) => {
   const inset = useSafeAreaInsets();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [birthday, setBirthday] = useState("");
   const [occupation, setOccupation] = useState("");
   const [aboutMe, setAboutMe] = useState("");
   const [isSetFirstName, setIsSetFirstName] = useState(true);
@@ -64,7 +64,7 @@ const SetUpProfile1 = ({ navigation }) => {
       setDate(currentDate);
       if (Platform.OS === "android") {
         toggleShowPicker();
-        setDateOfBirth(currentDate.toDateString());
+        setDateOfBirth(currentDate.toString());
       }
     } else {
       toggleShowPicker();
@@ -247,13 +247,18 @@ const SetUpProfile1 = ({ navigation }) => {
                 />
                 <TextInput
                   style={{
-                    fontSize: 20,
-                    fontFamily: "SourceSansProRegular",
+                    fontSize: 16,
+                    fontFamily: "LatoRegular",
                     marginLeft: 10,
                   }}
                   editable={false}
                   placeholder="Choose your birthday"
-                  value={dateOfBirth}
+                  value={new Date(dateOfBirth).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                   onChangeText={setDateOfBirth}
                   placeholderTextColor={RED_COLOR}
                   color={RED_COLOR}
@@ -261,24 +266,29 @@ const SetUpProfile1 = ({ navigation }) => {
               </View>
             )}
             {!showPicker && (
-              <Pressable
+              <TouchableOpacity
                 style={styles.choose_birthday_wrapper}
                 onPress={toggleShowPicker}
               >
                 <TextInput
                   style={{
-                    fontSize: 20,
-                    fontFamily: "SourceSansProRegular",
+                    fontSize: 16,
+                    fontFamily: "LatoRegular",
                     marginLeft: 10,
                   }}
                   editable={false}
                   placeholder="Choose your birthday"
-                  value={dateOfBirth}
+                  value={new Date(dateOfBirth).toLocaleDateString("en-US", {
+                    weekday: "long",
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                   onChangeText={setDateOfBirth}
                   placeholderTextColor={RED_COLOR}
                   color={RED_COLOR}
                 />
-              </Pressable>
+              </TouchableOpacity>
             )}
           </View>
         </View>
@@ -300,6 +310,7 @@ const SetUpProfile1 = ({ navigation }) => {
                 dispatch(userUpdateLastName(lastName));
                 dispatch(userUpdateOccupation(occupation));
                 dispatch(userUpdateAboutMe(aboutMe));
+                dispatch(userUpdateBirthday(dateOfBirth));
                 navigation.navigate("SetUpProfile2");
               }
             }}
@@ -371,7 +382,8 @@ const styles = StyleSheet.create({
   choose_birthday_wrapper: {
     width: "100%",
     backgroundColor: LIGHT_RED_COLOR,
-    paddingVertical: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 4,
     borderRadius: 16,
     justifyContent: "center",
     //alignItems: "center",

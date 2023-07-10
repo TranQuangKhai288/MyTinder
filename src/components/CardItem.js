@@ -35,7 +35,12 @@ const CardItem = ({ info }) => {
               <View style={styles.text_wrapper}>
                 <View style={styles.text_infor_wrapper}>
                   <Text style={styles.textName}>{info.firstName},</Text>
-                  <Text style={styles.textAge}>20</Text>
+                  <Text style={styles.textAge}>
+                    {info.birthday
+                      ? new Date().getFullYear() -
+                        new Date(info.birthday).getFullYear()
+                      : 20}
+                  </Text>
                 </View>
               </View>
             </BlurView>

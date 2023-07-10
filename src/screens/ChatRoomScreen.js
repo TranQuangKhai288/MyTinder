@@ -17,6 +17,7 @@ import {
   ScrollView,
   TextInput,
   Platform,
+  Image,
 } from "react-native";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
@@ -34,12 +35,8 @@ import {
   FIREBASE_AUTH,
 } from "../../firebaseConfig";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Image } from "react-native-elements";
-import { doc, onSnapshot } from "firebase/firestore";
-import Messages from "../components/Messages";
-import { ref, push, set, onValue } from "firebase/database";
+import { ref, push, set, onValue, update, get } from "firebase/database";
 import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
-import { checkReference } from "../firebase/chat";
 import { SCREEN_WIDTH } from "../constants/constants";
 
 const ChatRoomScreen = ({ navigation, route }) => {
@@ -60,13 +57,14 @@ const ChatRoomScreen = ({ navigation, route }) => {
         key: newChildMessageRef.key,
         message: message,
         sender: user.id,
-        time: new Date().getTime().toString(),
+        time: new Date().toString(),
       });
       scrollViewRef.current.scrollToEnd({ animated: true });
       setMessage("");
     }
   };
 
+  // fetch chats
   useEffect(() => {
     const messageRef = ref(FIREBASE_REALTIME_DB, "chats/" + chatID);
     const handleNewMessage = (snapshot) => {
@@ -76,7 +74,9 @@ const ChatRoomScreen = ({ navigation, route }) => {
           ({ key, message, sender, time }) => ({ key, message, sender, time })
         );
         setChats(messageArray);
-        scrollViewRef.current.scrollToEnd({ animated: true });
+        setTimeout(() => {
+          scrollViewRef.current.scrollToEnd({ animated: true });
+        }, 500);
       }
     };
     const subcrition = onValue(messageRef, handleNewMessage);
@@ -86,6 +86,7 @@ const ChatRoomScreen = ({ navigation, route }) => {
     };
   }, []);
 
+  // fetch user status
   useEffect(() => {
     const statusRef = ref(FIREBASE_REALTIME_DB, "status/" + user.id);
     const handleNewStatus = (snapshot) => {
@@ -103,9 +104,31 @@ const ChatRoomScreen = ({ navigation, route }) => {
 
   useFocusEffect(
     useCallback(() => {
-      scrollViewRef.current.scrollToEnd({ animated: true });
+      const statusRef = ref(
+        FIREBASE_REALTIME_DB,
+        "status/" + currentUser.id + "/" + user.id
+      );
+      update(statusRef, {
+        isReding: true,
+        isReadAll: true,
+      });
+
+      return () => {
+        const statusRef = ref(
+          FIREBASE_REALTIME_DB,
+          "status/" + currentUser.id + "/" + user.id
+        );
+        update(statusRef, {
+          isReding: false,
+          isReadAll: true,
+        });
+      };
     }, [])
   );
+
+  // useEffect(() => {
+  //   scrollViewRef.current.scrollToEnd({ animated: true });
+  // });
 
   return (
     <View
@@ -221,9 +244,7 @@ const ChatRoomScreen = ({ navigation, route }) => {
         <View style={{ flex: 1, backgroundColor: "#FFF" }}>
           <ScrollView
             ref={scrollViewRef}
-            style={{
-              height: Dimensions.get("window").height,
-            }}
+            style={{}}
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}
           >
@@ -395,9 +416,8 @@ const ChatRoomScreen = ({ navigation, route }) => {
             <View>
               <TextInput
                 placeholder="Aa"
-                autoCapitalize="none"
                 style={[styles.input]}
-                fontSize={16}
+                multiline={true}
                 onFocus={() => {
                   setChatting(true);
                 }}
@@ -433,10 +453,10 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "#EEEEEE",
     paddingHorizontal: 16,
-    paddingVertical: 8,
-    width: Dimensions.get("window").width - 92,
+    paddingVertical: 4,
+    width: SCREEN_WIDTH - 92,
     borderRadius: 20,
-    fontSize: 18,
+    fontSize: 16,
   },
   message_item_wrapper: {
     flexDirection: "row",

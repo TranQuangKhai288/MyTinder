@@ -19,7 +19,7 @@ import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
 import { ref, set } from "firebase/database";
 
 // Register user with email and password
-export const registerUser = async (user, password, showNoti) => {
+export const registerUser = async (user, password, showNoti, showNoti2) => {
   await createUserWithEmailAndPassword(FIREBASE_AUTH, user.email, password)
     .then(async (userCredential) => {
       // Signed in
@@ -27,10 +27,15 @@ export const registerUser = async (user, password, showNoti) => {
       user.succesfulRegister = true;
       try {
         await sendEmailVerification(userCredential.user);
-        showNoti("Email verification sent", "Please check your email.");
+        // showNoti("Email verification sent", "Please check your email.");
+        showNoti2("Email verification sent, please check your email.");
       } catch (error) {
         if (error.code === "auth/too-many-requests") {
-          showNoti(
+          // showNoti(
+          //   "Verification email already sent",
+          //   "Please check your email."
+          // );
+          showNoti2(
             "Verification email already sent",
             "Please check your email."
           );
