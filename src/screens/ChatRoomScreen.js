@@ -170,9 +170,13 @@ const ChatRoomScreen = ({ navigation, route }) => {
 
             <View style={{ position: "relative" }}>
               <Image
-                source={{
-                  uri: user.avatar,
-                }}
+                source={
+                  user.avatar
+                    ? {
+                        uri: user.avatar,
+                      }
+                    : require("../assets/images/avatar-default.png")
+                }
                 style={{
                   width: 44,
                   height: 44,
@@ -259,7 +263,13 @@ const ChatRoomScreen = ({ navigation, route }) => {
               }}
             >
               <Image
-                source={{ uri: user.avatar }}
+                source={
+                  user.avatar
+                    ? {
+                        uri: user.avatar,
+                      }
+                    : require("../assets/images/avatar-default.png")
+                }
                 style={{ width: 160, height: 160, borderRadius: 80 }}
               />
               <Text

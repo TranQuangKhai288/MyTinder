@@ -168,6 +168,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     textAlign: "center",
     color: RED_COLOR,
+    fontFamily: "LatoRegular",
   },
 });
 

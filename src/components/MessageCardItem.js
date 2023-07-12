@@ -32,9 +32,13 @@ const MessageCardItem = ({ user, lastMessage, status }) => {
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <View style={{ position: "relative" }}>
             <Image
-              source={{
-                uri: user.avatar,
-              }}
+              source={
+                user.avatar
+                  ? {
+                      uri: user.avatar,
+                    }
+                  : require("../assets/images/avatar-default.png")
+              }
               style={{
                 height: 52,
                 width: 52,

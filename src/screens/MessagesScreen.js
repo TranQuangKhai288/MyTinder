@@ -52,7 +52,7 @@ const MessagesScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
 
-  const handleChatRoom = async (user) => {
+  const handleChatRoom = (user) => {
     let chatid = "";
     const id1 = currentUser.id + user.id;
     const id2 = user.id + currentUser.id;
@@ -107,16 +107,17 @@ const MessagesScreen = ({ navigation }) => {
         <TouchableOpacity
           style={{ justifyContent: "flex-end", marginRight: 24 }}
           onPress={() => {
-            dispatch(userLogout());
-            logoutUser();
-            updateOfflineStatus(currentUser);
-            navigation.navigate("LoginScreen");
+            navigation.navigate("Profile");
           }}
         >
           <Image
-            source={{
-              uri: currentUser.avatar,
-            }}
+            source={
+              currentUser.avatar
+                ? {
+                    uri: currentUser.avatar,
+                  }
+                : require("../assets/images/avatar-default.png")
+            }
             style={{
               height: 40,
               width: 40,
@@ -148,7 +149,7 @@ const MessagesScreen = ({ navigation }) => {
           style={{ fontSize: 20 }}
           name="search"
           type="ionicons"
-          color="#5352ed"
+          color="#E94057"
         />
         <TextInput
           placeholder="Search by name..."
@@ -171,12 +172,22 @@ const MessagesScreen = ({ navigation }) => {
               backgroundColor: "transparent",
             }}
             numColumns={1}
-            data={allUser.filter((user) => {
-              let userName = user.firstName + " " + user.lastName;
-              return (
-                userName.toLowerCase().indexOf(keySearch.toLowerCase()) !== -1
-              );
-            })}
+            data={allUser
+              .filter(
+                (user) =>
+                  !!currentUser.matches.find((match) => match === user.id)
+              )
+              .filter((user) => {
+                let userName = user.firstName + " " + user.lastName;
+                return (
+                  userName.toLowerCase().indexOf(keySearch.toLowerCase()) !== -1
+                );
+              })
+              .sort((a, b) =>
+                a.firstName
+                  .toLowerCase()
+                  .localeCompare(b.firstName.toLowerCase())
+              )}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <View key={item.id}>
@@ -207,7 +218,7 @@ const styles = StyleSheet.create({
     fontFamily: "LatoRegular",
     fontSize: 16,
     color: "#333",
-    paddingVertical: 12,
+    paddingVertical: 8,
     paddingHorizontal: 4,
     marginLeft: 8,
   },

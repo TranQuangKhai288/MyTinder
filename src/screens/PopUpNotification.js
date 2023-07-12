@@ -27,6 +27,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     backgroundColor: "#00000000",
     height: SCREEN_HEIGHT,
+    flex: 1,
   },
   modal_wrapper: {
     justifyContent: "center",

@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     color: "#444444",
-    fontFamily: "SourceSansProSemiBold",
+    fontWeight: "bold",
   },
   body_wrapper: { marginBottom: 16 },
   body_text: { fontSize: 13, textAlign: "center", color: "#444444" },
@@ -72,9 +72,9 @@ const styles = StyleSheet.create({
     borderColor: "#dddddd",
   },
   footer_button_text: {
-    fontSize: 18,
+    fontSize: 16,
     color: RED_COLOR,
-    fontFamily: "SourceSansProSemiBold",
+    fontWeight: "bold",
   },
 });
 

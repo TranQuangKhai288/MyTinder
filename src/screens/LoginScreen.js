@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ImageBackground,
   TouchableOpacity,
+  Image,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { RED_COLOR } from "../constants/color";
@@ -30,9 +31,12 @@ import PopUpNotificationDialog from "./PopUpNotificationDialog";
 import { allUserClear, allUserFetch } from "../redux/actions/allUserActions";
 import { ref, set } from "firebase/database";
 import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
+import { SvgXml } from "react-native-svg";
+import { LogoIcon } from "../constants/icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const LoginScreen = ({ navigation }) => {
-  console.log("LoginScreen");
+  const insets = useSafeAreaInsets();
   const userState = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const [enableNextButton, setEnableNextButton] = useState(true);
@@ -86,9 +90,9 @@ const LoginScreen = ({ navigation }) => {
           dispatch(allUserFetch(users.filter((u) => u.id !== user.id)));
           updateOnlineStatus(user);
           if (userState.isSetUp) {
-            navigation.navigate("BottomTab");
+            navigation.replace("BottomTab");
           } else {
-            navigation.navigate("SetUpProfile");
+            navigation.replace("SetUpProfile");
           }
           // navigation.navigate("BottomTab");
           setIsLoading(false);
@@ -107,7 +111,7 @@ const LoginScreen = ({ navigation }) => {
 
   const handleSignUp = () => {
     // Perform login logic here
-    navigation.navigate("SignUpScreen");
+    navigation.replace("SignUpScreen");
   };
 
   const handleForgot = () => {
@@ -125,8 +129,18 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <ImageBackground
+      <View
+        style={[
+          styles.wrapper,
+          {
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          },
+        ]}
+      >
+        {/* <ImageBackground
           source={require("../assets/images/backgr.jpg")}
           style={{
             flex: 1,
@@ -137,10 +151,21 @@ const LoginScreen = ({ navigation }) => {
             right: 0,
             bottom: 0,
           }}
-        />
+        /> */}
 
         <View style={styles.containerLogin}>
-          <Text style={styles.loginText}>Login</Text>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              marginBottom: 40,
+              marginTop: 32,
+            }}
+          >
+            <SvgXml xml={LogoIcon} height={120} width={120} />
+            <Text style={styles.loginText}>Sign in to continue</Text>
+          </View>
 
           <View
             style={[
@@ -152,7 +177,7 @@ const LoginScreen = ({ navigation }) => {
               style={styles.inputIcon}
               name="user"
               type="ionicons"
-              color="#5352ed"
+              color={RED_COLOR}
             />
             <TextInput
               placeholder="Gmail"
@@ -176,7 +201,7 @@ const LoginScreen = ({ navigation }) => {
               style={styles.inputIcon}
               name="lock"
               type="ionicons"
-              color="#5352ed"
+              color={RED_COLOR}
             />
             <TextInput
               placeholder="Password"
@@ -189,7 +214,10 @@ const LoginScreen = ({ navigation }) => {
             />
           </View>
 
-          <TouchableOpacity onPress={handleForgot}>
+          <TouchableOpacity
+            onPress={handleForgot}
+            style={{ marginVertical: 2 }}
+          >
             <Text style={styles.fpText}>Forgot Password?</Text>
           </TouchableOpacity>
 
@@ -198,21 +226,23 @@ const LoginScreen = ({ navigation }) => {
             onPress={handleLogin}
             disabled={!enableNextButton}
           >
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Sign in</Text>
           </TouchableOpacity>
 
-          <View style={{ flexDirection: "row", marginTop: 8 }}>
-            <Text>Don't have an account?</Text>
+          <View style={{ flexDirection: "row", marginTop: 16 }}>
+            <Text style={{ fontFamily: "LatoRegular", fontSize: 15 }}>
+              Don't have an account?
+            </Text>
             <TouchableOpacity onPress={handleSignUp}>
               <Text
                 style={{
                   color: RED_COLOR,
-                  fontStyle: "italic",
-                  textDecorationLine: "underline",
+                  fontFamily: "LatoBold",
                   marginLeft: 4,
+                  fontSize: 15,
                 }}
               >
-                Sign Up
+                Sign up
               </Text>
             </TouchableOpacity>
           </View>
@@ -234,13 +264,13 @@ const LoginScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   wrapper: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    position: "relative",
   },
 
   containerLogin: {
@@ -253,10 +283,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   loginText: {
-    fontFamily: "SourceSansProBold",
-    fontSize: 24,
-    marginTop: 12,
-    marginBottom: 4,
+    fontFamily: "LatoBlack",
+    fontSize: 20,
+    marginTop: 16,
   },
   inputView: {
     height: 40,
@@ -268,12 +297,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   inputIcon: {
-    paddingHorizontal: 8,
+    marginHorizontal: 8,
   },
   input: {
-    height: 40,
     flex: 1,
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
     color: "#333",
   },
@@ -286,30 +314,29 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonText: {
-    fontFamily: "SourceSansProBold",
+    fontFamily: "LatoBold",
     fontSize: 16,
     color: "white",
     marginBottom: 4,
   },
   loginButtonText: {
     color: "#fff",
-    fontFamily: "SourceSansProBold",
+    fontFamily: "LatoBold",
     alignSelf: "center",
     fontSize: 22,
   },
   registerText: {
     alignSelf: "center",
     marginTop: 12,
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
   },
   fpText: {
     marginTop: 10,
     alignSelf: "flex-end",
-    textDecorationLine: "underline",
-    fontFamily: "SourceSansProRegular",
-    fontSize: 16,
-    color: "#5352ed",
+    fontFamily: "LatoBold",
+    fontSize: 15,
+    color: RED_COLOR,
   },
 });
 export default LoginScreen;

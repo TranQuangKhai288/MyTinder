@@ -35,6 +35,7 @@ import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import PopUpNotificationDialog from "./PopUpNotificationDialog";
 import { set } from "firebase/database";
+import PopUpNotification from "./PopUpNotification";
 
 const SetUpProfile1 = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);
@@ -53,6 +54,8 @@ const SetUpProfile1 = ({ navigation }) => {
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
+  const [avatar, setAvatar] = useState("");
+  const [isSetAvatar, setIsSetAvatar] = useState(true);
 
   const toggleShowPicker = () => {
     setShowPicker(!showPicker);
@@ -80,6 +83,8 @@ const SetUpProfile1 = ({ navigation }) => {
     });
     if (!result.canceled) {
       dispatch(userUpdateAvatar(result.assets[0].uri));
+      setAvatar(result.assets[0].uri);
+      setIsSetAvatar(true);
     }
   };
 
@@ -304,7 +309,10 @@ const SetUpProfile1 = ({ navigation }) => {
               if (lastName.length === 0) {
                 setIsSetLastName(false);
               }
-              if (firstName !== "" && lastName !== "") {
+              if (avatar.length === 0) {
+                setIsSetAvatar(false);
+              }
+              if (firstName !== "" && lastName !== "" && avatar !== "") {
                 setEnableNextButton(false);
                 dispatch(userUpdateFirstName(firstName));
                 dispatch(userUpdateLastName(lastName));
@@ -326,6 +334,14 @@ const SetUpProfile1 = ({ navigation }) => {
           title={"Error"}
           message={"No access to gallery"}
         />
+        {isSetAvatar ? null : (
+          <PopUpNotification
+            message={"You must set your avatar"}
+            onRequestClose={() => {
+              setIsSetAvatar(true);
+            }}
+          />
+        )}
         <StatusBar style="dark" />
       </ScrollView>
     </View>

@@ -13,25 +13,29 @@ import {
 import { BlurView } from "expo-blur";
 import { Entypo } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
-import { CloseIcon, HeartIcon } from "../constants/icons";
+import { CloseIcon, HeartIcon, MessageIcon } from "../constants/icons";
 import { RED_COLOR } from "../constants/color";
 
-const CardItem = ({ info }) => {
+const CardItem = ({ info, remove, chat }) => {
   return (
     <View style={styles.containerCardItem}>
       {/* IMAGE */}
       <View style={styles.card}>
         <ImageBackground
-          source={{
-            uri: info.avatar,
-          }}
+          source={
+            info.avatar
+              ? {
+                  uri: info.avatar,
+                }
+              : require("../assets/images/avatar-default.png")
+          }
           style={{
             width: Dimensions.get("window").width / 2.5,
             height: Dimensions.get("window").height / 3.8,
           }}
         >
           <View style={styles.content}>
-            <BlurView style={styles.blur} tint="dark" intensity={50}>
+            <BlurView style={styles.blur} tint="dark" intensity={70}>
               <View style={styles.text_wrapper}>
                 <View style={styles.text_infor_wrapper}>
                   <Text style={styles.textName}>{info.firstName},</Text>
@@ -59,6 +63,9 @@ const CardItem = ({ info }) => {
                   backgroundColor: "#EEEEEE",
                   height: 36,
                 }}
+                onPress={() => {
+                  remove();
+                }}
               >
                 <SvgXml xml={CloseIcon} width={24} height={28} />
               </TouchableOpacity>
@@ -78,8 +85,11 @@ const CardItem = ({ info }) => {
                   height: 36,
                   backgroundColor: RED_COLOR,
                 }}
+                onPress={() => {
+                  chat();
+                }}
               >
-                <SvgXml xml={HeartIcon} width={24} height={28} />
+                <SvgXml xml={MessageIcon} width={24} height={28} />
               </TouchableOpacity>
             </View>
           </View>

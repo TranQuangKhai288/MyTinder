@@ -13,6 +13,8 @@ export const USER_UPDATE_INTERESTS = "USER_UPDATE_INTERESTS";
 export const USER_UPDATE_IS_VERIFIED = "USER_UPDATE_IS_VERIFIED";
 export const USER_UPDATE_IS_SET_UP = "USER_UPDATE_IS_SET_UP";
 export const USER_ADD_CHATS = "USER_ADD_CHATS";
+export const USER_ADD_MATCHES = "USER_ADD_MATCHES";
+export const USER_REMOVE_MATCHES = "USER_REMOVE_MATCHES";
 
 export const userLogin = () => ({
   type: USER_LOGIN,
@@ -85,4 +87,14 @@ export const userUpdateIsSetUp = (isSetUp) => ({
 export const userAddChats = (chat) => ({
   type: USER_ADD_CHATS,
   payload: chat,
+});
+
+export const userAddMatches = (match) => ({
+  type: USER_ADD_MATCHES,
+  payload: match,
+});
+
+export const userRemoveMatches = (match) => ({
+  type: USER_REMOVE_MATCHES,
+  payload: match,
 });

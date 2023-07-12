@@ -28,7 +28,7 @@ const StartScreen = ({ navigation }) => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            navigation.navigate("WelcomeScreen");
+            navigation.navigate("SignUpScreen");
           }}
         >
           <Text style={styles.button_text}>Create an account</Text>

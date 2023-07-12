@@ -239,6 +239,16 @@ export const updateUserChatsToFirestore = async (user) => {
   }
 };
 
+export const updateUserMatchesToFirestore = async (user) => {
+  try {
+    await updateDoc(doc(FIRESTORE_DB, "User", user.docID), {
+      matches: user.matches,
+    });
+  } catch (error) {
+    console.log("Error updating user document: ", error);
+  }
+};
+
 export const fetchAllUserData = async () => {
   try {
     const querySnapshot = await getDocs(collection(FIRESTORE_DB, "User"));

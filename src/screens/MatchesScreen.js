@@ -11,128 +11,31 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import CardItem from "../components/CardItem";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { ScrollView } from "react-native-virtualized-view";
-
-const DATA = [
-  {
-    id: 1,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 20,
-    status: "online",
-  },
-  {
-    id: 2,
-    image:
-      "https://i.pinimg.com/736x/0b/22/97/0b2297a3c2d1006d93592c295cd4791b.jpg",
-    firstname: "Tran Quang",
-    lastname: "Ku",
-    age: 19,
-    status: "online",
-  },
-  {
-    id: 3,
-    image:
-      "https://t3.ftcdn.net/jpg/05/38/28/52/360_F_538285203_UJl9HNQ3oD3JfqCO8uvPxVTp4s0wtp2i.jpg",
-    firstname: "Tran Quang",
-    lastname: "Tam",
-    age: 15,
-    status: "online",
-  },
-  {
-    id: 4,
-    image:
-      "https://e0.pxfuel.com/wallpapers/331/165/desktop-wallpaper-cat-by-majist-72-now-browse-millions-of-popular-cats-an-cute-animals-cute-little-animals-cute-animal-drawings-cute-cartoon-kitten.jpg",
-    firstname: "Tran Quang",
-    lastname: "Vu",
-    age: 20,
-    status: "online",
-  },
-
-  {
-    id: 5,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Aloo",
-    age: 20,
-    status: "online",
-  },
-  {
-    id: 6,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 25,
-    status: "online",
-  },
-  {
-    id: 7,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 25,
-    status: "online",
-  },
-  {
-    id: 8,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 25,
-    status: "online",
-  },
-  {
-    id: 9,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 25,
-    status: "online",
-  },
-  {
-    id: 10,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 25,
-    status: "online",
-  },
-  {
-    id: 11,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 25,
-    status: "online",
-  },
-  {
-    id: 12,
-    image:
-      "https://w0.peakpx.com/wallpaper/171/15/HD-wallpaper-cat-animals-cute-nature-sailor.jpg",
-    firstname: "Tran Quang",
-    lastname: "Khai",
-    age: 25,
-    status: "online",
-  },
-];
+import { userRemoveMatches } from "../redux/actions/userActions";
 
 const MatchesScreen = ({ navigation }) => {
   const currentUser = useSelector((state) => state.user.user);
   const allUser = useSelector((state) => state.allUser.allUser);
+  const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const handleMatchesinfo = (user) => {
     console.log("user before navigate", user);
     navigation.navigate("OtherProfileScreen", user);
+  };
+
+  const handleChat = (user) => {
+    let chatid = "";
+    const id1 = currentUser.id + user.id;
+    const id2 = user.id + currentUser.id;
+    if (currentUser.id.localeCompare(user.id) === -1) chatid = id1;
+    else chatid = id2;
+    navigation.navigate("ChatRoomScreen", { user: user, chatID: chatid });
+  };
+
+  const handleRemoveMatch = (user) => {
+    dispatch(userRemoveMatches(user.id));
   };
 
   return (
@@ -170,11 +73,18 @@ const MatchesScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={{ justifyContent: "flex-end", marginRight: 24 }}
+          onPress={() => {
+            navigation.navigate("Profile");
+          }}
         >
           <Image
-            source={{
-              uri: currentUser.avatar,
-            }}
+            source={
+              currentUser.avatar
+                ? {
+                    uri: currentUser.avatar,
+                  }
+                : require("../assets/images/avatar-default.png")
+            }
             style={{
               height: 40,
               width: 40,
@@ -195,7 +105,16 @@ const MatchesScreen = ({ navigation }) => {
               backgroundColor: "transparent",
             }}
             numColumns={2}
-            data={allUser}
+            data={allUser
+              .filter(
+                (user) =>
+                  !!currentUser.matches.find((match) => match === user.id)
+              )
+              .sort((a, b) =>
+                a.firstName
+                  .toLowerCase()
+                  .localeCompare(b.firstName.toLowerCase())
+              )}
             keyExtractor={(item) => item.id.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -204,7 +123,15 @@ const MatchesScreen = ({ navigation }) => {
                   console.log("item: ", item);
                 }}
               >
-                <CardItem info={item} />
+                <CardItem
+                  info={item}
+                  chat={() => {
+                    handleChat(item);
+                  }}
+                  remove={() => {
+                    handleRemoveMatch(item);
+                  }}
+                />
               </TouchableOpacity>
             )}
           />

@@ -14,6 +14,8 @@ import {
   USER_UPDATE_IS_VERIFIED,
   USER_UPDATE_IS_SET_UP,
   USER_ADD_CHATS,
+  USER_ADD_MATCHES,
+  USER_REMOVE_MATCHES,
 } from "../actions/userActions";
 
 const userInitialState = {
@@ -153,6 +155,24 @@ const userReducer = (state = userInitialState, action) => {
         user: {
           ...state.user,
           chats: [...state.user.chats, action.payload],
+        },
+      };
+    case USER_ADD_MATCHES:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          matches: [...state.user.matches, action.payload],
+        },
+      };
+    case USER_REMOVE_MATCHES:
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          matches: state.user.matches.filter(
+            (match) => match !== action.payload
+          ),
         },
       };
     default:

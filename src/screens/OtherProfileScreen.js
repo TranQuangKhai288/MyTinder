@@ -12,12 +12,20 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SCREEN_WIDTH } from "../constants/constants";
 import { SvgXml } from "react-native-svg";
-import { CloseIcon, HeartIcon, RightArrowIcon } from "../constants/icons";
-import { RED_COLOR } from "../constants/color";
-import { useSelector } from "react-redux";
+import {
+  CloseIcon,
+  HeartIcon,
+  MessageIcon,
+  RightArrowIcon,
+} from "../constants/icons";
+import { LIGHT_RED_COLOR, RED_COLOR } from "../constants/color";
+import { useSelector, useDispatch } from "react-redux";
 import { gender, interests } from "../assets/data/data";
+import { userRemoveMatches } from "../redux/actions/userActions";
 
 const OtherProfileScreen = ({ navigation, route }) => {
+  const currentUser = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const insets = useSafeAreaInsets();
   const user = route.params;
   console.log(user);
@@ -32,6 +40,20 @@ const OtherProfileScreen = ({ navigation, route }) => {
   ];
 
   const handleMatches = () => {
+    navigation.goBack();
+  };
+
+  const handleChat = (chatUser) => {
+    let chatid = "";
+    const id1 = currentUser.id + chatUser.id;
+    const id2 = chatUser.id + currentUser.id;
+    if (currentUser.id.localeCompare(chatUser.id) === -1) chatid = id1;
+    else chatid = id2;
+    navigation.navigate("ChatRoomScreen", { user: chatUser, chatID: chatid });
+  };
+
+  const handleRemoveMatch = (chatUser) => {
+    dispatch(userRemoveMatches(chatUser.id));
     navigation.goBack();
   };
 
@@ -63,11 +85,21 @@ const OtherProfileScreen = ({ navigation, route }) => {
         </TouchableOpacity>
         <View style={styles.content_wrapper}>
           <View style={styles.function_button_wrapper}>
-            <TouchableOpacity style={styles.dislike_button_wrapper}>
+            <TouchableOpacity
+              style={styles.dislike_button_wrapper}
+              onPress={() => {
+                handleRemoveMatch(user);
+              }}
+            >
               <SvgXml xml={CloseIcon} height={32} width={32} />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.like_button_wrapper}>
-              <SvgXml xml={HeartIcon} height={32} width={32} />
+            <TouchableOpacity
+              style={styles.like_button_wrapper}
+              onPress={() => {
+                handleChat(user);
+              }}
+            >
+              <SvgXml xml={MessageIcon} height={32} width={32} />
             </TouchableOpacity>
           </View>
           <View style={styles.name_job_wrapper}>
@@ -136,8 +168,8 @@ const OtherProfileScreen = ({ navigation, route }) => {
                   <View key={index} style={styles.gallery_item_wrapper}>
                     <Image
                       style={{
-                        width: 100,
-                        height: (100 * 4) / 3,
+                        width: 96,
+                        height: (96 * 4) / 3,
                         borderRadius: 8,
                       }}
                       source={item}
@@ -184,6 +216,8 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 40,
     padding: 28,
     marginTop: -40,
+    borderWidth: 4,
+    borderColor: LIGHT_RED_COLOR,
   },
   function_button_wrapper: {
     flexDirection: "row",
@@ -192,18 +226,18 @@ const styles = StyleSheet.create({
     marginTop: -68,
   },
   dislike_button_wrapper: {
-    height: 80,
-    width: 80,
-    borderRadius: 40,
+    height: 72,
+    width: 72,
+    borderRadius: 36,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#EEEEEE",
-    marginRight: 32,
+    marginRight: 24,
   },
   like_button_wrapper: {
-    height: 80,
-    width: 80,
-    borderRadius: 40,
+    height: 72,
+    width: 72,
+    borderRadius: 36,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: RED_COLOR,

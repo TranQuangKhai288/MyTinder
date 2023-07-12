@@ -26,8 +26,12 @@ import LoadingScreen from "./LoadingScreen";
 import { set } from "firebase/database";
 import { useEffect } from "react";
 import PopUpNotification from "./PopUpNotification";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { LogoIcon } from "../constants/icons";
+import { SvgXml } from "react-native-svg";
 const SignUpScreen = ({ navigation }) => {
   const userState = useSelector((state) => state.user.user);
+  const insets = useSafeAreaInsets();
   //text input states
   const [gmail, setGmail] = useState("");
   const [password, setPassword] = useState("");
@@ -100,7 +104,7 @@ const SignUpScreen = ({ navigation }) => {
           // }, 3000);
           setIsLoading(false);
           setTimeout(() => {
-            navigation.navigate("LoginScreen");
+            navigation.replace("LoginScreen");
           }, 1500);
           console.log("Navigate to login screen");
         } else {
@@ -115,7 +119,7 @@ const SignUpScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     {
-      navigation.navigate("LoginScreen");
+      navigation.replace("LoginScreen");
     }
   };
 
@@ -133,21 +137,30 @@ const SignUpScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <ImageBackground
-          source={require("../assets/images/backgr.jpg")}
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-          }}
-        />
+      <View
+        style={[
+          styles.wrapper,
+          {
+            paddingTop: insets.top,
+            paddingBottom: insets.bottom,
+            paddingLeft: insets.left,
+            paddingRight: insets.right,
+          },
+        ]}
+      >
         <View style={styles.containerSignUp}>
-          <Text style={styles.loginText}>Sign Up</Text>
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              width: "100%",
+              marginBottom: 40,
+              marginTop: 32,
+            }}
+          >
+            <SvgXml xml={LogoIcon} height={120} width={120} />
+            <Text style={styles.loginText}>Sign up to continue</Text>
+          </View>
           {/* TextInput gmail */}
           <View
             style={[
@@ -220,37 +233,23 @@ const SignUpScreen = ({ navigation }) => {
               handleSignUp();
             }}
           >
-            <Text style={styles.buttonText}>Sign Up</Text>
+            <Text style={styles.buttonText}>Sign up</Text>
           </TouchableOpacity>
 
-          <View style={{ flexDirection: "row", marginTop: 8 }}>
-            <Text>Or</Text>
-            <TouchableOpacity onPress={handleSignUpByPhoneNumber}>
-              <Text
-                style={{
-                  color: RED_COLOR,
-                  fontStyle: "italic",
-                  textDecorationLine: "underline",
-                  marginLeft: 4,
-                }}
-              >
-                Sign up by phone number{"->"}
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={{ flexDirection: "row", marginTop: 8 }}>
-            <Text>Have an account?</Text>
+          <View style={{ flexDirection: "row", marginTop: 16 }}>
+            <Text style={{ fontFamily: "LatoRegular", fontSize: 15 }}>
+              Have an account?
+            </Text>
             <TouchableOpacity onPress={handleLogin}>
               <Text
                 style={{
                   color: RED_COLOR,
-                  fontStyle: "italic",
-                  textDecorationLine: "underline",
+                  fontFamily: "LatoBold",
                   marginLeft: 4,
+                  fontSize: 15,
                 }}
               >
-                Login
+                Sign in
               </Text>
             </TouchableOpacity>
           </View>
@@ -280,13 +279,13 @@ const SignUpScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFF",
   },
   wrapper: {
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    position: "relative",
   },
 
   containerSignUp: {
@@ -299,13 +298,12 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   loginText: {
-    fontFamily: "SourceSansProBold",
-    fontSize: 24,
-    marginTop: 12,
-    marginBottom: 4,
+    fontFamily: "LatoBlack",
+    fontSize: 20,
+    marginTop: 16,
   },
   buttonText: {
-    fontFamily: "SourceSansProBold",
+    fontFamily: "LatoBold",
     fontSize: 16,
     color: "white",
     marginBottom: 4,
@@ -317,8 +315,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#CCCCCC",
+    backgroundColor: "#f1f3f6",
   },
 
   inputviewFirstName: {
@@ -375,7 +372,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     flex: 1,
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
     color: "#333",
   },
@@ -389,20 +386,20 @@ const styles = StyleSheet.create({
   },
   loginButtonText: {
     color: "#fff",
-    fontFamily: "SourceSansProBold",
+    fontFamily: "LatoBold",
     alignSelf: "center",
     fontSize: 22,
   },
   registerText: {
     alignSelf: "center",
     marginTop: 12,
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
   },
   fpText: {
     marginTop: 10,
     alignSelf: "flex-end",
-    fontFamily: "SourceSansProRegular",
+    fontFamily: "LatoRegular",
     fontSize: 16,
     color: "#5352ed",
   },

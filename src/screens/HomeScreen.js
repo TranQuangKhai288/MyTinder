@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -8,10 +8,11 @@ import { Entypo } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/FontAwesome"; // Replace with the appropriate icon library import
 import { LinearGradient } from "expo-linear-gradient";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { SvgXml } from "react-native-svg";
 import { CloseIcon, HeartIcon } from "../constants/icons";
 import { RED_COLOR } from "../constants/color";
+import { userAddMatches } from "../redux/actions/userActions";
 
 const HomeScreen = ({ navigation }) => {
   useLayoutEffect(() => {
@@ -23,7 +24,10 @@ const HomeScreen = ({ navigation }) => {
   const insets = useSafeAreaInsets();
   const allUsers = useSelector((state) => state.allUser.allUser);
   const currentUser = useSelector((state) => state.user.user);
-  console.log("allUsers: ", allUsers);
+  const dispatch = useDispatch();
+  const [allCards, setAllCards] = useState(allUsers);
+  const swiperRef = useRef();
+  console.log(currentUser.matches);
   return (
     <View
       style={[
@@ -65,11 +69,18 @@ const HomeScreen = ({ navigation }) => {
         >
           <TouchableOpacity
             style={{ justifyContent: "flex-end", marginRight: 24 }}
+            onPress={() => {
+              navigation.navigate("Profile");
+            }}
           >
             <Image
-              source={{
-                uri: currentUser.avatar,
-              }}
+              source={
+                currentUser.avatar
+                  ? {
+                      uri: currentUser.avatar,
+                    }
+                  : require("../assets/images/avatar-default.png")
+              }
               style={{
                 height: 40,
                 width: 40,
@@ -86,12 +97,19 @@ const HomeScreen = ({ navigation }) => {
       {/* Swipe card */}
       <View style={styles.swiper_wrapper}>
         <Swiper
-          cards={allUsers}
+          cards={allCards}
+          ref={swiperRef}
           onSwipedLeft={() => {
             console.log("Swipe NOPE");
           }}
-          onSwipedRight={() => {
+          onSwipedRight={(cardIndex) => {
             console.log("Swipe MATCH");
+            const check = currentUser.matches.find(
+              (item) => item === allCards[cardIndex].id
+            );
+            if (!check) {
+              dispatch(userAddMatches(allCards[cardIndex].id));
+            }
           }}
           disableBottomSwipe={true}
           disableTopSwipe={true}
@@ -149,7 +167,16 @@ const HomeScreen = ({ navigation }) => {
           }}
           renderCard={(card) => (
             <View key={card.id} style={styles.card}>
-              <Image style={styles.Image} source={{ uri: card.avatar }} />
+              <Image
+                style={styles.Image}
+                source={
+                  card.avatar
+                    ? {
+                        uri: card.avatar,
+                      }
+                    : require("../assets/images/avatar-default.png")
+                }
+              />
               <View style={styles.content}>
                 <LinearGradient
                   colors={["transparent", "#000000"]}
@@ -174,10 +201,15 @@ const HomeScreen = ({ navigation }) => {
             </View>
           )}
           onSwiped={(cardIndex) => console.log("Card swiped: ", cardIndex)}
-          onSwipedAll={() => console.log("All cards swiped")}
+          onSwipedAll={() => {
+            if (allCards.length === 0) {
+              setAllCards(allUsers);
+            }
+          }}
           cardIndex={0}
           stackSize={3}
-          backgroundColor="black"
+          overlayOpacityHorizontalThreshold={40}
+          infinite={true}
         />
       </View>
       {/* end of swipe card */}
@@ -187,8 +219,8 @@ const HomeScreen = ({ navigation }) => {
         style={{
           position: "absolute",
           flexDirection: "row",
-          justifyContent: "space-evenly",
-          bottom: "12%",
+          justifyContent: "center",
+          bottom: "14%",
           width: "100%",
         }}
       >
@@ -200,6 +232,10 @@ const HomeScreen = ({ navigation }) => {
             width: 58,
             height: 58,
             backgroundColor: "#EEEEEE",
+            marginRight: 24,
+          }}
+          onPress={() => {
+            swiperRef.current.swipeLeft();
           }}
         >
           <SvgXml xml={CloseIcon} width={32} height={32} />
@@ -213,6 +249,9 @@ const HomeScreen = ({ navigation }) => {
             width: 58,
             height: 58,
             backgroundColor: RED_COLOR,
+          }}
+          onPress={() => {
+            swiperRef.current.swipeRight();
           }}
         >
           <SvgXml xml={HeartIcon} width={32} height={32} />
@@ -275,9 +314,14 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   text_infor_wrapper: { flexDirection: "row", alignItems: "flex-end" },
-  text: { color: "#fff", fontSize: 16 },
-  textName: { color: "#fff", fontSize: 28 },
-  textAge: { color: "#fff", fontSize: 26, marginLeft: 8 },
+  text: { color: "#fff", fontSize: 16, fontFamily: "LatoRegular" },
+  textName: { color: "#fff", fontSize: 28, fontFamily: "LatoRegular" },
+  textAge: {
+    color: "#fff",
+    fontSize: 26,
+    marginLeft: 8,
+    fontFamily: "LatoRegular",
+  },
 });
 
 export default HomeScreen;
