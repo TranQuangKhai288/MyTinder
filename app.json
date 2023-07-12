@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "MyTinder",
+    "name": "My Tinder",
     "slug": "MyTinder",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,10 +18,15 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.uit.twobros.mytinder",
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "favicon": "./src.assets/favicon.png"
@@ -33,6 +38,11 @@
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "c82030a1-c8c4-45c9-b4cb-e3cfe680f88b"
+      }
+    }
   }
 }

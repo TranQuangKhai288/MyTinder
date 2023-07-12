@@ -8,16 +8,12 @@ import {
   TouchableOpacity,
   Platform,
   Alert,
-  Modal,
-  Pressable,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { useFonts } from "expo-font";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../firebaseConfig";
 import { RED_COLOR } from "../constants/color";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 const SignUpScreen = ({ navigation }) => {
   //text input states
   const [phoneNumBer, setPhoneNumber] = useState("");

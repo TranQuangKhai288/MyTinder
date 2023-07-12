@@ -3,7 +3,6 @@ import React from "react";
 import {
   Text,
   View,
-  Image,
   Dimensions,
   TouchableOpacity,
   ImageBackground,
@@ -11,9 +10,8 @@ import {
 } from "react-native";
 
 import { BlurView } from "expo-blur";
-import { Entypo } from "@expo/vector-icons";
 import { SvgXml } from "react-native-svg";
-import { CloseIcon, HeartIcon, MessageIcon } from "../constants/icons";
+import { CloseIcon, MessageIcon } from "../constants/icons";
 import { RED_COLOR } from "../constants/color";
 
 const CardItem = ({ info, remove, chat }) => {

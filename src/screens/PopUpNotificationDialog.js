@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { View, StyleSheet, Text, Modal, TouchableOpacity } from "react-native";
 import { SCREEN_HEIGHT } from "../constants/constants";
 import { RED_COLOR } from "../constants/color";
-import { StatusBar } from "expo-status-bar";
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from "react-native-safe-area-context";
 
 const PopUpNotificationDialog = ({
   visible,

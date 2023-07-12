@@ -5,22 +5,16 @@ import {
   View,
   StyleSheet,
   ScrollView,
-  ImageBackground,
   TouchableOpacity,
   Image,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SCREEN_WIDTH } from "../constants/constants";
 import { SvgXml } from "react-native-svg";
-import {
-  CloseIcon,
-  HeartIcon,
-  MessageIcon,
-  RightArrowIcon,
-} from "../constants/icons";
+import { CloseIcon, MessageIcon, RightArrowIcon } from "../constants/icons";
 import { LIGHT_RED_COLOR, RED_COLOR } from "../constants/color";
 import { useSelector, useDispatch } from "react-redux";
-import { gender, interests } from "../assets/data/data";
+import { interests } from "../assets/data/data";
 import { userRemoveMatches } from "../redux/actions/userActions";
 
 const OtherProfileScreen = ({ navigation, route }) => {

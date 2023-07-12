@@ -1,15 +1,6 @@
 import React, { useEffect, useRef } from "react";
-import {
-  View,
-  Button,
-  Image,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  Animated,
-} from "react-native";
-import color, { RED_COLOR } from "../constants/color";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
+import { RED_COLOR } from "../constants/color";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import MatchesScreen from "../screens/MatchesScreen";

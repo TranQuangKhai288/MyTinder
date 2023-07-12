@@ -4,23 +4,13 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
-  ImageBackground,
   TouchableOpacity,
   FlatList,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
-import {
-  CameraIcon,
-  RedRightArrowIcon,
-  WhiteCheckIcon,
-} from "../constants/icons";
-import {
-  LIGHT_GRAY_COLOR,
-  LIGHT_RED_COLOR,
-  RED_COLOR,
-} from "../constants/color";
+import { RedRightArrowIcon, WhiteCheckIcon } from "../constants/icons";
+import { LIGHT_GRAY_COLOR, RED_COLOR } from "../constants/color";
 import { useSelector, useDispatch } from "react-redux";
 import { userUpdateGender } from "../redux/actions/userActions";
 import { gender } from "../assets/data/data";

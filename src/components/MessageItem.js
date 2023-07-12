@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import MessageCardItem from "./MessageCardItem";
 import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
-import { getRefLength } from "../firebase/chat";
 import { TouchableOpacity } from "react-native";
 import { useSelector } from "react-redux";
-import { ref, get, onValue, off, update } from "firebase/database";
+import { ref, onValue } from "firebase/database";
 
 const MessageItem = ({ item, handleChatRoom }) => {
   const currentUser = useSelector((state) => state.user.user);

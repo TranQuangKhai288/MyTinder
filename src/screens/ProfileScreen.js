@@ -1,24 +1,20 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  FlatList,
   StyleSheet,
   Image,
-  Dimensions,
   ScrollView,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import CardItem from "../components/CardItem";
 import { useSelector, useDispatch } from "react-redux";
-import { userRemoveMatches, userLogout } from "../redux/actions/userActions";
+import { userLogout } from "../redux/actions/userActions";
 import {
   Flash2Icon,
   InforCircleIcon,
   KeyIcon,
-  LeftArrowIcon,
   LikeIcon,
   MenuIcon,
   RedLeftArrowIcon,

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { RED_COLOR } from "../constants/color";
 import { StatusBar } from "expo-status-bar";
 import { Modal } from "react-native";

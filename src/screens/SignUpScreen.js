@@ -4,26 +4,14 @@ import {
   TextInput,
   Text,
   StyleSheet,
-  ImageBackground,
   TouchableOpacity,
-  Platform,
-  Alert,
-  Modal,
-  Pressable,
 } from "react-native";
-import { doc, setDoc } from "firebase/firestore";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
-import { useFonts } from "expo-font";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { FIREBASE_AUTH, FIRESTORE_DB } from "../../firebaseConfig";
 import { RED_COLOR } from "../constants/color";
-import DateTimePickerModal from "react-native-modal-datetime-picker";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import PopUpNotificationDialog from "./PopUpNotificationDialog";
 import { useSelector } from "react-redux";
 import { addUserToFirestore, registerUser } from "../firebase/user";
 import LoadingScreen from "./LoadingScreen";
-import { set } from "firebase/database";
 import { useEffect } from "react";
 import PopUpNotification from "./PopUpNotification";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

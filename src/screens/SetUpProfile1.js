@@ -4,12 +4,10 @@ import {
   View,
   Text,
   StyleSheet,
-  Image,
   ImageBackground,
   TouchableOpacity,
   ScrollView,
   Platform,
-  Pressable,
   TextInput,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -20,7 +18,6 @@ import {
   LIGHT_RED_COLOR,
   RED_COLOR,
 } from "../constants/color";
-import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   userUpdateAvatar,
@@ -34,7 +31,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import PopUpNotificationDialog from "./PopUpNotificationDialog";
-import { set } from "firebase/database";
 import PopUpNotification from "./PopUpNotification";
 
 const SetUpProfile1 = ({ navigation }) => {

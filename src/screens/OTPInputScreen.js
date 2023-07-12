@@ -11,7 +11,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { SvgXml } from "react-native-svg";
 import { RedRightArrowIcon } from "../constants/icons";
 import { LIGHT_GRAY_COLOR, RED_COLOR } from "../constants/color";
-import { interests } from "../assets/data/data";
 
 const OTPInputScreen = () => {
   const inset = useSafeAreaInsets();

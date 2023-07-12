@@ -21,12 +21,8 @@ import {
 import { useFocusEffect } from "@react-navigation/native";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { FIREBASE_STORAGE } from "../../firebaseConfig";
-import {
-  updateUserDocumentToFirestore,
-  updateUserInterestsToFirestore,
-} from "../firebase/user";
+import { updateUserDocumentToFirestore } from "../firebase/user";
 import LoadingScreen from "./LoadingScreen";
-import { set } from "firebase/database";
 
 const SetUpProfile3 = ({ navigation }) => {
   const user = useSelector((state) => state.user.user);

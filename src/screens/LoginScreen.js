@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   TextInput,
   Text,
   StyleSheet,
-  ImageBackground,
   TouchableOpacity,
-  Image,
 } from "react-native";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { RED_COLOR } from "../constants/color";
@@ -29,8 +27,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import LoadingScreen from "./LoadingScreen";
 import PopUpNotificationDialog from "./PopUpNotificationDialog";
 import { allUserClear, allUserFetch } from "../redux/actions/allUserActions";
-import { ref, set } from "firebase/database";
-import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
 import { SvgXml } from "react-native-svg";
 import { LogoIcon } from "../constants/icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";

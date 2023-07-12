@@ -1,41 +1,23 @@
-import React, {
-  useState,
-  useEffect,
-  useLayoutEffect,
-  useCallback,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 
 import {
   View,
   StyleSheet,
   Text,
   TouchableOpacity,
-  ImageBackground,
   Dimensions,
-  FlatList,
   ScrollView,
   TextInput,
   Platform,
   Image,
 } from "react-native";
-import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
 import { Icon } from "react-native-elements";
-import color, {
-  LIGHT_GRAY_COLOR,
-  LIGHT_RED_COLOR,
-  RED_COLOR,
-} from "../constants/color";
+import { RED_COLOR } from "../constants/color";
 import { useSelector } from "react-redux";
-import {
-  FIREBASE_APP,
-  FIRESTORE_DB,
-  FIREBASE_AUTH,
-} from "../../firebaseConfig";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ref, push, set, onValue, update, get } from "firebase/database";
+import { ref, push, set, onValue, update } from "firebase/database";
 import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
 import { SCREEN_WIDTH } from "../constants/constants";
 

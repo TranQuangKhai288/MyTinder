@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,43 +6,13 @@ import {
   FlatList,
   StyleSheet,
   Image,
-  Dimensions,
   TextInput,
 } from "react-native";
-
-import {
-  addDoc,
-  collection,
-  updateDoc,
-  doc,
-  getDoc,
-  setDoc,
-  query,
-  where,
-  getDocs,
-} from "firebase/firestore";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 import { FontAwesome5 } from "@expo/vector-icons";
-import MessageCardItem from "../components/MessageCardItem";
 import { ScrollView } from "react-native-virtualized-view";
-import {
-  FIREBASE_AUTH,
-  FIREBASE_REALTIME_DB,
-  FIRESTORE_DB,
-} from "../../firebaseConfig";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  addUserToFirestore,
-  fetchAllUserData,
-  updateUserChatsToFirestore,
-  logoutUser,
-  updateOfflineStatus,
-} from "../firebase/user";
-import { useFocusEffect } from "@react-navigation/native";
-import { userAddChats, userLogout } from "../redux/actions/userActions";
-import { ref, get } from "firebase/database";
-import { getRefLength } from "../firebase/chat";
 import MessageItem from "../components/MessageItem";
 
 const MessagesScreen = ({ navigation }) => {

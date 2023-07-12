@@ -39,6 +39,4 @@ const Message = () => {
   );
 };
 
-const styles = StyleSheet.create({});
-
 export default Message;

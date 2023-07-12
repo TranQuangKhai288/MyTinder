@@ -3,10 +3,7 @@ import { View, StyleSheet, Text, Image } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { useFonts } from "expo-font";
-import { Entypo } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Icon from "react-native-vector-icons/FontAwesome"; // Replace with the appropriate icon library import
 import { LinearGradient } from "expo-linear-gradient";
 import { useSelector, useDispatch } from "react-redux";
 import { SvgXml } from "react-native-svg";

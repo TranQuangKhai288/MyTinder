@@ -1,23 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import {
-  Text,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  ImageBackground,
-  StyleSheet,
-} from "react-native";
-import { BlurView } from "expo-blur";
-import { ref, onValue } from "firebase/database";
-import { FIREBASE_REALTIME_DB } from "../../firebaseConfig";
+import { Text, View, Image, Dimensions, StyleSheet } from "react-native";
 import { useSelector } from "react-redux";
 import { SCREEN_WIDTH } from "../constants/constants";
-import { LIGHT_GRAY_COLOR } from "../constants/color";
 
 const MessageCardItem = ({ user, lastMessage, status }) => {
-  const currentUser = useSelector((state) => state.user.user);
   const isEqualDate = (date1, date2) => {
     return (
       date1.getFullYear() === date2.getFullYear() &&
