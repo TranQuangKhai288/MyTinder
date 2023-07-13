@@ -166,7 +166,7 @@ const SetUpProfile3 = ({ navigation }) => {
             dispatch(userUpdateInterests(selectedInterestID));
             dispatch(userUpdateIsSetUp(true));
             await updateUserDocumentToFirestore(updatedUser);
-            navigation.navigate("BottomTab");
+            navigation.replace("BottomTab");
             setIsLoading(false);
           }}
         >

@@ -1,8 +1,8 @@
 import React from "react";
-import { View } from "react-native-animatable";
 import { SvgXml } from "react-native-svg";
 import { LogoIcon } from "../constants/icons";
 import { StatusBar } from "expo-status-bar";
+import { View } from "react-native";
 
 const SplashScreen = () => {
   return (
